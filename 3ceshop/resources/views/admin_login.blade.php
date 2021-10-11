@@ -26,12 +26,12 @@
 			<h2>Đăng nhập</h2>
 
 			<?php
-	$message = Session::get('message'); //get lấy message đã put
-	if($message){
-		echo '<span class="text-alter">',$message.'</span>';
-		Session::put('message',null); //nếu tồn tại mới in nếu không message null
-	}
-?>
+				$message = Session::get('message'); //get lấy message đã put
+				if($message){
+					echo '<span class="text-alter">',$message.'</span>';
+					Session::put('message',null); //nếu tồn tại mới in nếu không message null
+				}
+			?>
 <form action="{{URL::to('/admin-dashboard')}}" method="post">
 	{{csrf_field()}}
 	<input type="text" class="ggg" name="admin_email" placeholder="E-MAIL" required="">

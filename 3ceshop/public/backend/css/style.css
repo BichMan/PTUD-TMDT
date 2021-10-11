@@ -144,7 +144,7 @@ ul.sidebar-menu, ul.sidebar-menu li ul.sub {
 }
 
 ul.sidebar-menu {
-    padding-top: 80px;
+   /* padding-top: 80px;*/
 }
 
 #sidebar>ul>li>ul.sub {
