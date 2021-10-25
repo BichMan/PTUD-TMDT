@@ -21,6 +21,15 @@ use App\Http\Controllers\ProductController;
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/trang-chu',[HomeController::class, 'index']);
 
+//Danh muc san pham trang chu
+Route::get('/danh-muc-san-pham/{category_id}',[CategoryProduct::class, 'Category_Home']);
+
+//Thuong hieu san pham trang chu
+Route::get('/thuong-hieu-san-pham/{brand_id}',[BrandProduct::class, 'Brand_Home']);
+
+//Chi tiet san pham trang chu
+Route::get('/chi-tiet-san-pham/{product_id}',[ProductController::class, 'details_product']);
+
 //BackEnd - hoạt động ở server
 Route::get('/admin',[AdminController::class, 'index']);
 Route::get('/dashboard',[AdminController::class, 'show_dashboard']);

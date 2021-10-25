@@ -50,7 +50,8 @@
                             <label for="exampleInputEmail1">Hiển thị</label>
                          <select name="product_status" class="form-control input-sm m-bot15">
 
-                            <option value="1">Hiển thị</option>
+                            <option value="0">Hiển thị</option>
+                            <option value="1">Ẩn</option>
 
                         </select>
                     </div>
