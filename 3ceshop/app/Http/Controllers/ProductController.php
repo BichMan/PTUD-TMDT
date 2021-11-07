@@ -64,7 +64,7 @@ class ProductController extends Controller
         $data['product_image'] = '';
         DB::table('tbl_product')->insert($data);
         Session::put('message','Thêm sản phẩm thành công');
-        return Redirect::to('all-product'); //Trở về trang all-product
+        return Redirect::to('add-product'); //Trở về trang all-product
     } 
 
     public function active_product($product_id){
@@ -151,6 +151,6 @@ class ProductController extends Controller
         ->where('tbl_category_product.category_id',$category_id)->whereNotIn('tbl_product.product_id',[$product_id])->get();
         //tru san pham da xem whereNotIn 
 
-        return view('pages.Product.details_product')->with('category',$cate_product)->with('brand',$brand_product)->with('product_details',$details_product)->with('relate',$related_product);
+        return view('pages.product.details_product')->with('category',$cate_product)->with('brand',$brand_product)->with('product_details',$details_product)->with('relate',$related_product);
     }
 }

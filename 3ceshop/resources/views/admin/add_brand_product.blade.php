@@ -16,29 +16,27 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả thương hiệu</label>
-                            <textarea style="resize: none" rows="5" class="form-control" name="brand_product_desc" id="exampleInputPassword" placeholder="Mô tả thương hiệu"></textarea> 
+                            <textarea style="resize: none" rows="5" class="form-control" name="brand_product_desc" id="exampleInputPassword" placeholder="Mô tả thương hiệu"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Hiển thị</label>
-                         <select name="brand_product_status" class="form-control input-sm m-bot15">
-                            <option value="0">Ẩn</option>
-                            <option value="1">Hiển thị</option>
-                        </select>
-                    </div>
-                    <button type="submit" name="add_brand_product" class="btn btn-info">Thêm thương hiệu</button>
-                    <?php
+                            <select name="brand_product_status" class="form-control input-sm m-bot15">
+                                <option value="0">Hiển thị</option>
+                                <option value="1">Ẩn</option>
+                            </select>
+                        </div>
+                        <button type="submit" name="add_brand_product" class="btn btn-info">Thêm thương hiệu</button>
+                        <?php
                         $message = Session::get('message'); //get lấy message đã put
                         if($message){
-                            echo '<span class="text-alter">',$message.'</span>';
-                            Session::put('message',null); 
+                        echo '<span class="text-alter">',$message.'</span>';
+                        Session::put('message',null);
                         }
-                    ?>
-                </form>
+                        ?>
+                    </form>
+                </div>
             </div>
-
-        </div>
-    </section>
-
-</div>
+        </section>
+    </div>
 </div>
 @endsection

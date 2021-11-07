@@ -654,7 +654,7 @@ ul.sub-menu {
 }
 
 .category-products {
-  border: 1px solid #F7F7F0;
+  /*border: 1px solid #F7F7F0;*/
   margin-bottom: 35px;
   padding-bottom: 20px;
   padding-top: 15px;
@@ -761,7 +761,7 @@ h2.title:before{
 }
 
 .brands-name {
-  border: 1px solid #F7F7F0;
+  /*border: 1px solid #F7F7F0;*/
   padding-bottom: 20px;
   padding-top: 15px;
 }
@@ -843,6 +843,7 @@ h2.title {
   text-transform: uppercase;
   margin-bottom: 30px;
   position: relative;
+  padding: 8px;
 }
 
 .product-image-wrapper{
@@ -1532,7 +1533,7 @@ h2.title {
 
 .breadcrumbs .breadcrumb {
   background:transparent;
-  margin-bottom: 75px;
+  margin-bottom: 15px;
   padding-left: 0;
 }
 
@@ -1551,7 +1552,7 @@ h2.title {
   border-color:transparent transparent transparent #FE980F;
   position: absolute;
   top: 11px;
-  left:48px;
+  left:80px;
 
 }
 
@@ -1785,7 +1786,8 @@ h2.title {
 }
 
 .check_out {
-  margin-left: 20px
+  margin-left: 20px;
+  display: inherit;
 }
 
 
@@ -2396,6 +2398,7 @@ h2.title {
   border: 0 none;
   border-radius: 0;
   margin-top: 16px;
+  color: white;
 }
 
 .blank-arrow {

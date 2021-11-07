@@ -31,7 +31,7 @@ class AdminController extends Controller
     }
     public function show_dashboard()
     {
-        // $this->Auth_Login();
+        $this->Auth_Login();
         return view('admin.dashboard');
     }
     public function dashboard(Request $request){

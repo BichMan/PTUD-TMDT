@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController; 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CategoryProduct;
-use App\Http\Controllers\BrandProduct;
+use App\Http\Controllers\CategoryProductController;
+use App\Http\Controllers\BrandProductController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,12 +22,13 @@ use App\Http\Controllers\ProductController;
 //FrontEnd - hoạt động giao tiếp người dùng
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/trang-chu',[HomeController::class, 'index']);
+Route::post('/tim-kiem',[HomeController::class, 'search']);
 
 //Danh muc san pham trang chu
-Route::get('/danh-muc-san-pham/{category_id}',[CategoryProduct::class, 'Category_Home']);
+Route::get('/danh-muc-san-pham/{category_id}',[CategoryProductController::class, 'Category_Home']);
 
 //Thuong hieu san pham trang chu
-Route::get('/thuong-hieu-san-pham/{brand_id}',[BrandProduct::class, 'Brand_Home']);
+Route::get('/thuong-hieu-san-pham/{brand_id}',[BrandProductController::class, 'Brand_Home']);
 
 //Chi tiet san pham trang chu
 Route::get('/chi-tiet-san-pham/{product_id}',[ProductController::class, 'details_product']);
@@ -37,31 +40,31 @@ Route::get('/logout',[AdminController::class, 'logout']);
 Route::post('/admin-dashboard',[AdminController::class, 'dashboard']);
 
 //Category Product
-Route::get('/add-category-product',[CategoryProduct::class, 'add_category_product']);
-Route::get('/all-category-product',[CategoryProduct::class, 'all_category_product']);
-Route::get('/edit-category-product/{category_product_id}',[CategoryProduct::class, 'edit_category_product']);
-Route::get('/delete-category-product/{category_product_id}',[CategoryProduct::class, 'delete_category_product']);
+Route::get('/add-category-product',[CategoryProductController::class, 'add_category_product']);
+Route::get('/all-category-product',[CategoryProductController::class, 'all_category_product']);
+Route::get('/edit-category-product/{category_product_id}',[CategoryProductController::class, 'edit_category_product']);
+Route::get('/delete-category-product/{category_product_id}',[CategoryProductController::class, 'delete_category_product']);
 
-Route::get('/unactive-category-product/{category_product_id}',[CategoryProduct::class, 'unactive_category_product']);
-Route::get('/active-category-product/{category_product_id}',[CategoryProduct::class, 'active_category_product']);
+Route::get('/unactive-category-product/{category_product_id}',[CategoryProductController::class, 'unactive_category_product']);
+Route::get('/active-category-product/{category_product_id}',[CategoryProductController::class, 'active_category_product']);
 
-Route::post('/save-category-product',[CategoryProduct::class, 'save_category_product']);
-Route::post('/update-category-product/{category_product_id}',[CategoryProduct::class, 'update_category_product']);
+Route::post('/save-category-product',[CategoryProductController::class, 'save_category_product']);
+Route::post('/update-category-product/{category_product_id}',[CategoryProductController::class, 'update_category_product']);
 
 
 
 
 //Brand Product
-Route::get('/add-brand-product',[BrandProduct::class, 'add_brand_product']);
-Route::get('/all-brand-product',[brandProduct::class, 'all_brand_product']);
-Route::get('/edit-brand-product/{brand_product_id}',[BrandProduct::class, 'edit_brand_product']);
-Route::get('/delete-brand-product/{brand_product_id}',[BrandProduct::class, 'delete_brand_product']);
+Route::get('/add-brand-product',[BrandProductController::class, 'add_brand_product']);
+Route::get('/all-brand-product',[BrandProductController::class, 'all_brand_product']);
+Route::get('/edit-brand-product/{brand_product_id}',[BrandProductController::class, 'edit_brand_product']);
+Route::get('/delete-brand-product/{brand_product_id}',[BrandProductController::class, 'delete_brand_product']);
 
-Route::get('/unactive-brand-product/{brand_product_id}',[BrandProduct::class,'unactive_brand_product']);
-Route::get('/active-brand-product/{brand_product_id}',[BrandProduct::class, 'active_brand_product']);
+Route::get('/unactive-brand-product/{brand_product_id}',[BrandProductController::class,'unactive_brand_product']);
+Route::get('/active-brand-product/{brand_product_id}',[BrandProductController::class, 'active_brand_product']);
 
-Route::post('/save-brand-product',[BrandProduct::class, 'save_brand_product']);
-Route::post('/update-brand-product/{brand_product_id}',[BrandProduct::class, 'update_brand_product']);
+Route::post('/save-brand-product',[BrandProductController::class, 'save_brand_product']);
+Route::post('/update-brand-product/{brand_product_id}',[BrandProductController::class, 'update_brand_product']);
 
 
 //Product
@@ -75,3 +78,27 @@ Route::get('/active-product/{product_id}',[ProductController::class, 'active_pro
 
 Route::post('/save-product',[ProductController::class, 'save_product']);
 Route::post('/update-product/{product_id}',[ProductController::class, 'update_product']);
+
+
+//CART -- GIO HANG
+Route::post('/save-cart',[CartController::class, 'save_cart']);
+Route::get('/show-cart',[CartController::class, 'show_cart']);
+Route::get('/delete-cart/{rowId}',[CartController::class, 'delete_cart']);
+Route::post('/update-quantity-cart',[CartController::class, 'update_quantity_cart']);
+
+
+//Check Account
+
+Route::get('/login-checkout',[CheckoutController::class, 'login_checkout']);
+Route::get('/logout-checkout',[CheckoutController::class, 'logout_checkout']);
+Route::get('/checkout',[CheckoutController::class, 'checkout']);
+Route::get('/payment',[CheckoutController::class, 'payment']);
+Route::post('/login-customer',[CheckoutController::class, 'login_customer']);
+Route::post('/add-customer',[CheckoutController::class, 'add_customer']);
+Route::post('/save-customer',[CheckoutController::class, 'save_customer']);
+Route::post('/order-place',[CheckoutController::class, 'order_place']);
+
+
+//Order
+Route::get('/manage-order',[CheckoutController::class, 'manage_order']);
+Route::get('/view-order/{orderid}',[CheckoutController::class, 'view_order']);

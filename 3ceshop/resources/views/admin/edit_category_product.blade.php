@@ -7,7 +7,7 @@
                 Cập nhật danh mục sản phẩm
             </header>
             <div class="panel-body">
-            	@foreach($edit_category_product as $key =>$edit_value)
+                @foreach($edit_category_product as $key =>$edit_value)
                 <div class="position-center">
                     <form role="form" action="{{URL::to('/update-category-product/'.$edit_value->category_id)}}" method="post">
                         {{csrf_field()}}
@@ -18,17 +18,16 @@
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả danh mục</label>
                             <textarea style="resize: none" rows="5" class="form-control" name="category_product_desc" id="exampleInputPassword">
-                            	{{$edit_value->category_desc}}
-                            </textarea> 
+                            {{$edit_value->category_desc}}
+                            </textarea>
                         </div>
                         
-                    <button type="submit" name="update_category_product" class="btn btn-info">Cập nhật danh mục</button>
-                </form>
+                        <button type="submit" name="update_category_product" class="btn btn-info">Cập nhật danh mục</button>
+                    </form>
+                </div>
+                @endforeach
             </div>
-            @endforeach
-        </div>
-    </section>
-
-</div>
+        </section>
+    </div>
 </div>
 @endsection
