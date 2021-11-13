@@ -1,5 +1,5 @@
-@extends('layout')
-@section('content')
+@extends('layout_cart')
+@section('cart_content')
 <section id="cart_items">
 	<div class="container">
 		<div class="breadcrumbs">
@@ -14,7 +14,7 @@
 			<div class="table-responsive cart_info">
 				<?php
 				$content = Cart::content();
-				
+
 				?>
 				<table class="table table-condensed">
 					<thead>

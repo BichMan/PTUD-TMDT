@@ -1,5 +1,5 @@
-@extends('layout')
-@section('content')
+@extends('layout_cart')
+@section('cart_content')
 <section id="cart_items">
 	<div class="container">
 		<div class="breadcrumbs">
@@ -8,13 +8,13 @@
 				<li class="active">Thông tin thanh toán</li>
 			</ol>
 			</div><!--/breadcrums-->
-			
+
 			<div class="register-req">
 				<p>Vui lòng đăng nhập hoặc đăng ký để thanh toán giỏ hàng và xem lại giỏ hàng của bạn</p>
 				</div><!--/register-req-->
 				<div class="shopper-informations">
 					<div class="row">
-						<div class="col-sm-12 clearfix">
+						<div class="col-sm-12 col-xs-offset-3">
 							<div class="bill-to">
 								<p>Thông tin người nhận</p>
 								<div class="form-one">

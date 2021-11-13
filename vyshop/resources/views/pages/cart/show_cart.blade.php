@@ -1,5 +1,5 @@
-@extends('layout')
-@section('content')
+@extends('layout_cart')
+@section('cart_content')
 <section id="cart_items">
 	<div class="container">
 		<div class="breadcrumbs">
@@ -10,9 +10,9 @@
 		</div>
 		<div class="table-responsive cart_info">
 			<?php
-			$content = Cart::content();
-			
-			?>
+$content = Cart::content();
+
+?>
 			<table class="table table-condensed">
 				<thead>
 					<tr class="cart_menu">
@@ -50,9 +50,9 @@
 						<td class="cart_total">
 							<p class="cart_total_price">
 								<?php
-								$subtotal = $v_content ->price * $v_content ->qty;
-								echo number_format($subtotal).' '.'vnđ';
-								?>
+$subtotal = $v_content->price * $v_content->qty;
+echo number_format($subtotal) . ' ' . 'vnđ';
+?>
 							</p>
 						</td>
 						<td class="cart_delete">
@@ -68,30 +68,30 @@
 	<section id="do_action">
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-6">
+				<div class="col-md-6 align-self-center">
 					<div class="total_area">
 						<ul>
-							<li>Tổng <span>{{Cart::subtotal(0,',','.').' '.'vnđ'}}</span></li>
+							<li>Tổng <span>{{Cart::pricetotal(0,',','.').' '.'vnđ'}}</span></li>
 							<li>Thuế <span>{{Cart::tax(0,',','.').' '.'vnđ'}}</span></li>
 							<li>Phí vận chuyển <span>Free</span></li>
 							<li>Thành tiền <span>{{Cart::total(0,',','.').' '.'vnđ'}}</span></li>
 						</ul>
 						<?php
-							$customer_id =Session::get('customer_id');
-							$shipping_id =Session::get('shipping_id');
+$customer_id = Session::get('customer_id');
+$shipping_id = Session::get('shipping_id');
 
-						if($customer_id!=NULL && $shipping_id==NULL){
-						?>
+if ($customer_id != NULL && $shipping_id == NULL) {
+	?>
 						<a href="{{URL::to('/checkout')}}" class="btn btn-default check_out"> Thanh toán</a>
-						<?php } elseif($customer_id!=NULL && $shipping_id!=NULL){ ?>
-						
+						<?php } elseif ($customer_id != NULL && $shipping_id != NULL) {?>
+
 						<a href="{{URL::to('/payment')}}" class="btn btn-default check_out"> Thanh toán</a>
-						
-						<?php } else{ ?>
-						
+
+						<?php } else {?>
+
 						<a href="{{URL::to('/login-checkout')}}" class="btn btn-default check_out"> Thanh toán</a>
-						<?php } ?>
-						
+						<?php }?>
+
 					</div>
 				</div>
 			</div>

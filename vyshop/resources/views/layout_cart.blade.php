@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>3CE Shop</title>
+        <title>VY Shop</title>
         <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
         <link href="{{asset('public/frontend/css/font-awesome.min.css')}}" rel="stylesheet">
         <link href="{{asset('public/frontend/css/prettyPhoto.css')}}" rel="stylesheet">
@@ -68,7 +68,7 @@
                                     <li><a href="#">UK</a></li>
                                 </ul>
                             </div>
-                            
+
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
                                 DOLLAR
@@ -91,7 +91,7 @@
                                     if($customer_id!=NULL && $shipping_id ==NULL)
                                     {
                                 ?>
-                                <li><a href="{{URL::to('/checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li> 
+                                <li><a href="{{URL::to('/checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
                                 {{-- điền thông tin vận chuyển --}}
                                 <?php
                                     }
@@ -108,16 +108,16 @@
                                 <?php
                                     }
                                 ?>
-                                
+
                                 <li><a href="{{URL::to('/show-cart')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
                                 <?php
                                     $customer_id =Session::get('customer_id');
                                     if($customer_id!=NULL){
                                 ?>
                                 <li><a href="{{URL::to('/logout-checkout')}}"><i class="fa fa-lock"></i> Đăng xuất</a></li>
-                                
+
                                 <?php
-                                    } else{ 
+                                    } else{
                                 ?>
                                 <li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
                                 <?php
@@ -129,7 +129,7 @@
                 </div>
             </div>
             </div><!--/header-middle-->
-            
+
             <div class="header-bottom"><!--header-bottom-->
             <div class="container">
                 <div class="row">
@@ -148,11 +148,11 @@
                                 <li class="dropdown"><a href="#">Sản phẩm<i class="fa fa-angle-down"></i></a>
                                 <ul role="menu" class="sub-menu">
                                     <li><a href="{{URL::to('/trang-chu')}}">Products</a></li>
-                                    
+
                                 </ul>
                             </li>
                             <li class="dropdown"><a href="#">Tin tức<i class="fa fa-angle-down"></i></a>
-                            
+
                         </li>
                         {{-- <li><a href="{{URL::to('/show-cart')}}">Giỏ hàng</a></li> --}}
                         <li><a href="#">Liên hệ</a></li>
@@ -172,7 +172,7 @@
     </div>
     </div><!--/header-bottom-->
     </header><!--/header-->
-    
+
     <section id="slider"><!--slider-->
     <div class="container">
         <div class="row">
@@ -183,7 +183,7 @@
                         <li data-target="#slider-carousel" data-slide-to="1"></li>
                         <li data-target="#slider-carousel" data-slide-to="2"></li>
                     </ol>
-                    
+
                     <div class="carousel-inner">
                         <div class="item active">
                             {{-- <div class="col-sm-6">
@@ -221,10 +221,10 @@
                                 {{-- <img src="#"  class="pricing" alt="" /> --}}
                             {{-- </div> --}}
                         </div>
-                        
-                        
+
+
                     </div>
-                    
+
                     <a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
                         <i class="fa fa-angle-left"></i>
                     </a>
@@ -232,47 +232,17 @@
                         <i class="fa fa-angle-right"></i>
                     </a>
                 </div>
-                
+
             </div>
         </div>
     </div>
     </section><!--/slider-->
-    
+
     <section>
         <div class="container">
             <div class="row">
-                <div class="col-sm-3">
-                    <div class="left-sidebar">
-                        <h2>Danh mục sản phẩm</h2>
-                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
-                        
-                        @foreach($category as $key => $cate)
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><a href="{{URL::to('/danh-muc-san-pham/'.$cate->category_id)}}">{{$cate->category_name}}</a></h4>
-                            </div>
-                        </div>
-                        @endforeach
-                        </div><!--/category-products-->
-                        
-                        <div class="brands_products"><!--brands_products-->
-                        <h2>Thương hiệu sản phẩm</h2>
-                        <div class="brands-name">
-                            
-                            <ul class="nav nav-pills nav-stacked">
-                                @foreach($brand as $key => $brand)
-                                <li><a href="{{URL::to('/thuong-hieu-san-pham/'.$brand->brand_id)}}"> <span class="pull-right">(50)</span>{{$brand->brand_name}}</a></li>
-                                @endforeach
-                            </ul>
-                            
-                        </div>
-                        </div><!--/brands_products-->
-                        
-                        
-                    </div>
-                </div>
-                <div class="col-sm-9 padding-right">
-                    @yield('content')
+                <div class="col-sm-12">
+                    @yield('cart_content')
                 </div>
             </div>
         </div>
@@ -335,19 +305,19 @@
                         </form>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
-    
+
     <div class="footer-bottom">
         <div class="container">
             <div class="row">
-                <p style="text-align: center;">Copyright © 2021 3CE-SHOPPER Inc. All rights reserved.</p>
+                <p style="text-align: center;">Copyright © 2021 VY-SHOPPER Inc. All rights reserved.</p>
             </div>
         </div>
     </div>
-    
+
     </footer><!--/Footer-->
     <script src="{{asset('public/frontend/js/jquery.js')}}"></script>
     <script src="{{asset('public/frontend/js/bootstrap.min.js')}}"></script>

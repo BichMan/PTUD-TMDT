@@ -1,5 +1,5 @@
-@extends('layout')
-@section('content')
+@extends('layout_cart')
+@section('cart_content')
 <section id="cart_items">
 	<div class="container">
 		<div class="breadcrumbs">
@@ -12,7 +12,7 @@
 			<h2>Bạn đã đặt hàng thành công và đơn hàng của bạn đang được xử lý!</h2>
 			<h2>Cảm ơn đã chọn chúng tôi!</h2>
 		</div>
-			
+
 	</div>
-</section> 
+</section>
 @endsection

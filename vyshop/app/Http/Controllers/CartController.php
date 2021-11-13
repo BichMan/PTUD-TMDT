@@ -38,7 +38,7 @@ class CartController extends Controller
 
     }
     public function delete_cart($rowId){
-            Cart::update($rowId,0);
+            Cart::remove($rowId);
             return Redirect::to('/show-cart');
     }
 
