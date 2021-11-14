@@ -13,11 +13,15 @@
                         {{csrf_field()}}
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên sản phẩm</label>
-                            <input type="text" name="product_name" class="form-control" id="exampleInputEmail1" value="{{$product->product_name}}">
+                            <input type="text" name="product_name" class="form-control" id="exampleInputEmail1" value="{{$product->product_name}}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Từ khóa</label>
+                            <input type="text" style="resize: none" class="form-control" name="product_keywords" value="{{$product->meta_keywords}}" required>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Giá sản phẩm</label>
-                            <input type="text" name="product_price" class="form-control" id="exampleInputEmail1" value="{{$product->product_price}}">
+                            <input type="text" name="product_price" class="form-control" id="exampleInputEmail1" value="{{$product->product_price}}" required>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Hình ảnh sản phẩm</label>
@@ -26,11 +30,11 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả sản phẩm</label>
-                            <textarea style="resize: none" rows="5" class="form-control" name="product_desc" id="exampleInputPassword" placeholder="Mô tả sản phẩm">{{$product->product_desc}}</textarea>
+                            <textarea style="resize: none" rows="5" class="form-control" name="product_desc" id="ckeditor3" placeholder="Mô tả sản phẩm">{{$product->product_desc}}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Nội dung sản phẩm</label>
-                            <textarea style="resize: none" rows="5" class="form-control" name="product_content" id="exampleInputPassword" placeholder="Nội dung sản phẩm">{{$product->product_content}}</textarea>
+                            <textarea style="resize: none" rows="5" class="form-control" name="product_content" id="ckeditor4" placeholder="Nội dung sản phẩm">{{$product->product_content}}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Danh mục sản phẩm</label>
@@ -38,7 +42,7 @@
                                 @foreach($cate_product as $key => $cate)
                                 @if($cate ->category_id==$product->category_id)
                                 <option selected value="{{($cate ->category_id)}}">{{($cate ->category_name)}}</option>
-                                
+
                                 @else
                                 <option value="{{($cate ->category_id)}}">{{($cate ->category_name)}}</option>
                                 @endif
@@ -72,7 +76,7 @@
                         }
                         ?>
                     </form>
-                    
+
                     @endforeach
                 </div>
             </div>

@@ -69,6 +69,10 @@
 						<td>
 							<a href="{{URL::to('/edit-brand-product/'.$brand_pro->brand_id)}}" class="active styling-edit" ui-toggle-class="">
 							<i class="fa fa-pencil-square-o text-success text-active"></i></a>
+							{{-- <mat-icon role="img" class="mat-icon notranslate mat-icon-no-color ng-star-inserted" aria-hidden="true" data-mat-icon-type="svg" data-mat-icon-name="edit" data-mat-icon-namespace="common-small">
+							<svg width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet" focusable="false">
+							<path d="M2 13.12l8.49-8.488 2.878 2.878L4.878 16H2v-2.88zm13.776-8.017L14.37 6.507 11.494 3.63l1.404-1.406c.3-.3.783-.3 1.083 0l1.8 1.796c.3.3.3.784 0 1.083z" fill-rule="evenodd">
+							</path></svg></mat-icon> --}}
 							<a onclick="return confirm('Bạn có chắc rằng muốn xóa mục này?')" href="{{URL::to('/delete-brand-product/'.$brand_pro->brand_id)}}" class="active styling-edit" ui-toggle-class="">
 							<i class="fa fa-times text-danger text"></i></a>
 						</td>

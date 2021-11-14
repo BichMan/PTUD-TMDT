@@ -2,33 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use Cart;
-use DB;
+
 use Illuminate\Http\Request;
-use Redirect;
-use Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+use  Gloudemans\Shoppingcart\Facades\Cart;
 
 session_start();
 
-class CheckoutController extends Controller {
-	public function Auth_Login() {
+class CheckoutController extends Controller
+{
+	public function Auth_Login()
+	{
 		$admin_id = Session::get('admin_id');
 		if ($admin_id) {
 			return Redirect::to('dashboard');
 		} else {
 			return Redirect::to('admin')->send();
 		}
-
 	}
-	public function login_checkout() {
+	public function login_checkout(Request $request)
+	{
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
 		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
 
-		return view('pages.Checkout_Account.login_checkout')->with('category', $cate_product)->with('brand', $brand_product);
+		$meta_desc = "Đăng nhập/Đăng ký";
+		$meta_keywords = "Đăng nhập/Đăng ký";
+		$meta_title = "Đăng nhập/Đăng ký";
+		$url_canonical = $request->url();
+
+		return view('pages.Checkout_Account.login_checkout')->with('category', $cate_product)->with('brand', $brand_product)
+			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical);
 	}
 
-	public function add_customer(Request $request) {
+	public function add_customer(Request $request)
+	{
 		$data = array();
 		$data['customer_name'] = $request->customer_name;
 		$data['customer_email'] = $request->customer_email;
@@ -41,18 +51,24 @@ class CheckoutController extends Controller {
 		Session::put('customer_name', $request->customer_name);
 
 		return Redirect::to('/checkout');
-
 	}
 
-	public function checkout() {
+	public function checkout(Request $request)
+	{
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
 		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
 
-		return view('pages.Checkout_Account.checkout')->with('category', $cate_product)->with('brand', $brand_product);
+		$meta_desc = "Thông tin người nhận";
+		$meta_keywords = "Thông tin người nhận";
+		$meta_title = "Thông tin người nhận";
+		$url_canonical = $request->url();
+		return view('pages.Checkout_Account.checkout')->with('category', $cate_product)->with('brand', $brand_product)
+			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical);
 	}
 
-	public function save_customer(Request $request) {
+	public function save_customer(Request $request)
+	{
 		$data = array();
 		$data['shipping_name'] = $request->shipping_name;
 		$data['shipping_email'] = $request->shipping_email;
@@ -67,20 +83,28 @@ class CheckoutController extends Controller {
 		return Redirect::to('/payment');
 	}
 
-	public function payment() {
+	public function payment(Request $request)
+	{
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
 		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
 
-		return view('pages.Checkout_Account.payment')->with('category', $cate_product)->with('brand', $brand_product);
+		$meta_desc = "Xem lại đơn hàng";
+		$meta_keywords = "Xem lại đơn hàng";
+		$meta_title = "Xem lại đơn hàng";
+		$url_canonical = $request->url();
+		return view('pages.Checkout_Account.payment')->with('category', $cate_product)->with('brand', $brand_product)
+			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical);
 	}
 
-	public function logout_checkout() {
+	public function logout_checkout()
+	{
 		Session::flush();
 		return Redirect::to('/login-checkout');
 	}
 
-	public function login_customer(Request $request) {
+	public function login_customer(Request $request)
+	{
 		$email = $request->email_account;
 		$password = md5($request->password_account);
 		$result = DB::table('tbl_customer')->where('customer_email', $email)->where('customer_password', $password)->first();
@@ -93,7 +117,8 @@ class CheckoutController extends Controller {
 		}
 	}
 
-	public function order_place(Request $request) {
+	public function order_place(Request $request)
+	{
 		//insert phương thức thanh toán
 		$data = array();
 		$data['payment_method'] = $request->payment_option;
@@ -122,6 +147,10 @@ class CheckoutController extends Controller {
 		}
 
 		if ($data['payment_method'] == 1) {
+			$meta_desc = "Thanh toán thành công";
+			$meta_keywords = "Thanh toán Thành Công";
+			$meta_title = "Thanh toán Thành Công";
+			$url_canonical = $request->url();
 			echo 'Thanh toán bằng ATM';
 		} elseif ($data['payment_method'] == 2) {
 			Cart::destroy();
@@ -129,15 +158,25 @@ class CheckoutController extends Controller {
 
 			$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
 
-			return view('pages.Checkout_Account.handcash')->with('category', $cate_product)->with('brand', $brand_product);
+			$meta_desc = "Thanh toán thành công";
+			$meta_keywords = "Thanh toán Thành Công";
+			$meta_title = "Thanh toán Thành Công";
+			$url_canonical = $request->url();
 
+			return view('pages.Checkout_Account.handcash')->with('category', $cate_product)->with('brand', $brand_product)
+				->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical);
 		} else {
+			$meta_desc = "Thanh toán thành công";
+			$meta_keywords = "Thanh toán Thành Công";
+			$meta_title = "Thanh toán Thành Công";
+			$url_canonical = $request->url();
 			echo "Thanh toán bằng momo";
 		}
 		// return Redirect::to('/payment');
 	}
 
-	public function manage_order() {
+	public function manage_order()
+	{
 		$this->Auth_Login();
 		$all_order = DB::table('tbl_order')
 			->join('tbl_customer', 'tbl_order.customer_id', '=', 'tbl_customer.customer_id')
@@ -147,7 +186,8 @@ class CheckoutController extends Controller {
 		return view('admin_layout')->with('admin.manage_order', $manager_order);
 	}
 
-	public function view_order($orderid) {
+	public function view_order($orderid)
+	{
 		$this->Auth_Login();
 		$order_by_id = DB::table('tbl_order')
 			->join('tbl_customer', 'tbl_order.customer_id', '=', 'tbl_customer.customer_id')
@@ -157,6 +197,5 @@ class CheckoutController extends Controller {
 
 		$manager_order_by_id = view('admin.view_order')->with('order_by_id', $order_by_id);
 		return view('admin_layout')->with('admin.view_order', $manager_order_by_id);
-
 	}
 }

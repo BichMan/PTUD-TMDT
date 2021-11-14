@@ -2932,7 +2932,7 @@ input.ggg {
     outline: none;
     display: table;
     cursor: pointer;
-    margin: 45px auto 31px;
+    margin: 30px auto;
     transition: 0.5s all;
     -webkit-transition: 0.5s all;
     -o-transition: 0.5s all;
@@ -3099,7 +3099,8 @@ div#graph10, div#graph11 {
 
 @media (max-width:1280px) {
     .w3layouts-main {
-        width: 38%;
+    width: 50%;
+    background-color: cadetblue;
     }
 
     .captn {
