@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use  Gloudemans\Shoppingcart\Facades\Cart;
+use Brian2694\Toastr\Facades\Toastr;
+use App\Models\SliderModels;
 
 session_start();
 
@@ -24,6 +26,8 @@ class CheckoutController extends Controller
 	}
 	public function login_checkout(Request $request)
 	{
+		$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
+
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
 		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
@@ -34,7 +38,8 @@ class CheckoutController extends Controller
 		$url_canonical = $request->url();
 
 		return view('pages.Checkout_Account.login_checkout')->with('category', $cate_product)->with('brand', $brand_product)
-			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical);
+			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
+			->with('slider', $slider);
 	}
 
 	public function add_customer(Request $request)
@@ -55,6 +60,8 @@ class CheckoutController extends Controller
 
 	public function checkout(Request $request)
 	{
+		$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
+
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
 		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
@@ -64,7 +71,8 @@ class CheckoutController extends Controller
 		$meta_title = "Thông tin người nhận";
 		$url_canonical = $request->url();
 		return view('pages.Checkout_Account.checkout')->with('category', $cate_product)->with('brand', $brand_product)
-			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical);
+			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
+			->with('slider', $slider);
 	}
 
 	public function save_customer(Request $request)
@@ -85,6 +93,8 @@ class CheckoutController extends Controller
 
 	public function payment(Request $request)
 	{
+		$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
+
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
 		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
@@ -94,7 +104,8 @@ class CheckoutController extends Controller
 		$meta_title = "Xem lại đơn hàng";
 		$url_canonical = $request->url();
 		return view('pages.Checkout_Account.payment')->with('category', $cate_product)->with('brand', $brand_product)
-			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical);
+			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
+			->with('slider', $slider);
 	}
 
 	public function logout_checkout()
@@ -113,7 +124,9 @@ class CheckoutController extends Controller
 			Session::put('customer_id', $result->customer_id);
 			return Redirect::to('/checkout');
 		} else {
-			return Redirect::to('/login_checkout');
+			Session::put('message', 'Mật khẩu hoặc tài khoản sai. Vui lòng nhập lại');
+			// Toastr::warning('Mật khẩu hoặc tài khoản sai. Vui lòng nhập lại');
+			return Redirect::to('/login-checkout');
 		}
 	}
 
@@ -154,6 +167,8 @@ class CheckoutController extends Controller
 			echo 'Thanh toán bằng ATM';
 		} elseif ($data['payment_method'] == 2) {
 			Cart::destroy();
+			$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
+
 			$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
 			$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
@@ -164,7 +179,8 @@ class CheckoutController extends Controller
 			$url_canonical = $request->url();
 
 			return view('pages.Checkout_Account.handcash')->with('category', $cate_product)->with('brand', $brand_product)
-				->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical);
+				->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
+				->with('slider', $slider);
 		} else {
 			$meta_desc = "Thanh toán thành công";
 			$meta_keywords = "Thanh toán Thành Công";
@@ -197,5 +213,26 @@ class CheckoutController extends Controller
 
 		$manager_order_by_id = view('admin.view_order')->with('order_by_id', $order_by_id);
 		return view('admin_layout')->with('admin.view_order', $manager_order_by_id);
+	}
+
+//Quên mật khẩu
+	public function quen_mat_khau(Request $request){
+		$meta_desc = "Quên mật khẩu";
+		$meta_keywords = "Quên mật khẩu";
+		$meta_title ="Quên mật khẩu";
+		$url_canonical =$request->url();
+
+		$slider = SliderModels::orderBy('slider_id','DESC')->where('slider_status','0')->take(4)->get();
+		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
+		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
+
+		$all_product = DB::table('tbl_product')->where('product_status', '0')->orderby('product_id', 'desc')->limit(12)->get();
+		return view('pages.Checkout_Account.forget_pass')->with('category', $cate_product)->with('brand', $brand_product)->with('all_product', $all_product)
+		->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical)
+		->with('slider',$slider);
+	}
+
+	public function recover_pass(Request $request){
+		return Redirect::to('/quen-mat-khau');
 	}
 }

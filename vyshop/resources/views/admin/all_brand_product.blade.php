@@ -27,13 +27,6 @@
 			</div>
 		</div> --}}
 		<div class="table-responsive">
-			<?php
-			$message = Session::get('message'); //get lấy message đã put
-			if($message){
-			echo '<span class="text-alter">',$message.'</span>';
-			Session::put('message',null);
-			}
-			?>
 			<table class="table table-striped b-t b-light">
 				<thead>
 					<tr>

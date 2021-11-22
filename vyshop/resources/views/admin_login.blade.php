@@ -6,15 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="Visitors Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
  Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
-    <script type="application/x-javascript">
-        addEventListener("load", function() {
-            setTimeout(hideURLbar, 0);
-        }, false);
-
-        function hideURLbar() {
-            window.scrollTo(0, 1);
-        }
-    </script>
+ <link rel="shortcut icon" type="image/png" href="{{ asset('public/backend/images/icon_admin.jpg') }}" />
     <!-- bootstrap-css -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <!-- //bootstrap-css -->
@@ -27,28 +19,31 @@
         rel='stylesheet' type='text/css'>
     <!-- font-awesome icons -->
     <link rel="stylesheet" href="{{ asset('public/backend/css/font.css') }}" type="text/css" />
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+
     <link href="{{ asset('public/backend/css/font-awesome.css') }}" rel="stylesheet">
     <!-- //font-awesome icons -->
-    <script src="js/jquery2.0.3.min.js"></script>
 </head>
 
 <body>
     <div class="log-w3">
         <div class="w3layouts-main">
             <h2>Đăng nhập</h2>
-            <?php
-            $message = Session::get('message'); //get lấy message đã put
-            if ($message) {
-                echo '<a>', $message . '</a>';
-                Session::put('message', null); //nếu tồn tại mới in nếu không message null
-            }
-            ?>
+            <div text-align="center">
+                <?php
+                $message = Session::get('message'); //get lấy message đã put
+                if ($message) {
+                    echo '<a>', $message . '</a>';
+                    Session::put('message', null); //nếu tồn tại mới in nếu không message null
+                }
+                ?>
+            </div>
             <form action="{{ URL::to('/admin-dashboard') }}" method="post">
                 {{ csrf_field() }}
-                @foreach($errors->all() as $error)
-                {{$error}}
+                @foreach ($errors->all() as $error)
+                    {{ $error }}
                 @endforeach
-                <input type="text" class="ggg" name="admin_email" placeholder="E-MAIL" >
+                <input type="text" class="ggg" name="admin_email" placeholder="E-MAIL">
                 <input type="password" class="ggg" name="admin_password" placeholder="PASSWORD">
                 <a href="#">Quên mật khẩu?</a>
                 <div class="clearfix"></div>
@@ -74,8 +69,19 @@
     <script src="{{ asset('public/backend/js/jquery.nicescroll.js') }}"></script>
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
     <script src="js/jquery.scrollTo.js"></script>
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    {!! Toastr::message() !!}
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="js/jquery2.0.3.min.js"></script>
+    <script type="application/x-javascript">
+        addEventListener("load", function() {
+            setTimeout(hideURLbar, 0);
+        }, false);
 
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
 </body>
 
 </html>

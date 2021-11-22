@@ -30,13 +30,6 @@
                             </select>
                         </div>
                         <button type="submit" name="add_brand_product" class="btn btn-info">Thêm thương hiệu</button>
-                        <?php
-                        $message = Session::get('message'); //get lấy message đã put
-                        if($message){
-                        echo '<span class="text-alter">',$message.'</span>';
-                        Session::put('message',null);
-                        }
-                        ?>
                     </form>
                 </div>
             </div>

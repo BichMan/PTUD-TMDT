@@ -31,10 +31,6 @@
                             <textarea style="resize: none" rows="5" class="form-control" name="product_desc" placeholder="Mô tả sản phẩm" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Nội dung sản phẩm</label>
-                            <textarea style="resize: none" rows="5" class="form-control" name="product_content"  placeholder="Nội dung sản phẩm" required></textarea>
-                        </div>
-                        <div class="form-group">
                             <label for="exampleInputEmail1">Danh mục sản phẩm</label>
                             <select name="product_cate" class="form-control input-sm m-bot15">
                                 @foreach($cate_product as $key => $cate)
@@ -58,13 +54,6 @@
                             </select>
                         </div>
                         <button type="submit" name="add_product" class="btn btn-info">Thêm sản phẩm</button>
-                        <?php
-                        $message = Session::get('message'); //get lấy message đã put
-                        if($message){
-                        echo '<span class="text-alter">',$message.'</span>';
-                        Session::put('message',null);
-                        }
-                        ?>
                     </form>
                 </div>
             </div>

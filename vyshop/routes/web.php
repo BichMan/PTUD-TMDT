@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SliderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -95,6 +96,11 @@ Route::post('/add-customer', [CheckoutController::class, 'add_customer']);
 Route::post('/save-customer', [CheckoutController::class, 'save_customer']);
 Route::post('/order-place', [CheckoutController::class, 'order_place']);
 
+//Quên mật khẩu
+Route::get('/quen-mat-khau', [CheckoutController::class, 'quen_mat_khau']);
+Route::post('/recover-pass', [CheckoutController::class, 'recover_pass']);
+
+
 //Order
 Route::get('/manage-order', [CheckoutController::class, 'manage_order']);
 Route::get('/view-order/{orderid}', [CheckoutController::class, 'view_order']);
@@ -109,3 +115,16 @@ Route::get('/admin/callback', [AdminController::class, 'callback_facebook']);
 //Login Google
 Route::get('/login-google',[AdminController::class, 'login_google']);
 Route::get('/google/callback',[AdminController::class, 'callback_google']);
+
+
+//Banner
+Route::get('/manage-slider',[SliderController::class, 'manage_slider']);
+Route::get('/add-slider',[SliderController::class, 'add_slider']);
+Route::post('/insert-slider',[SliderController::class, 'insert_slider']);
+Route::get('/unactive-slider/{slider_id}',[SliderController::class, 'unactive_slider']);
+Route::get('/active-slider/{slider_id}',[SliderController::class, 'active_slider']);
+Route::get('/delete-slider/{slider_id}',[SliderController::class, 'delete_slider']);
+
+
+
+

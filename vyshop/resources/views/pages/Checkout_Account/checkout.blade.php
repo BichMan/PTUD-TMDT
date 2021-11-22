@@ -20,10 +20,10 @@
 								<div class="form-one">
 									<form action="{{URL::to('/save-customer')}}" method="POST">
 										{{csrf_field()}}
-										<input type="text" name="shipping_email" placeholder="Email" required>
+										<input type="email" name="shipping_email" placeholder="Email" required>
 										<input type="text" name="shipping_name" placeholder="Họ và tên" required>
 										<input type="text" name="shipping_address" placeholder="Địa chỉ nhận hàng" required>
-										<input type="text" name="shipping_phone" placeholder="Số điện thoại" required>
+										<input type="number" name="shipping_phone" placeholder="Số điện thoại" required>
 										<textarea name="shipping_note"  placeholder="Ghi chú cho người gửi hàng" rows="4" required></textarea>
 										<input type="submit" value="Xác nhận" name="send_oder" class="btn btn-primary btn-sm">
 									</form>

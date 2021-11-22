@@ -10,7 +10,7 @@
     <meta name="robots" content="INDEX,FOLLOW" />
     <link rel="canonical" href="{{ $url_canonical }}" />
     <meta name="author" content="">
-    <link rel="icon" type="image/x-icon" href="" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('public/frontend/images/icon.png') }}" />
     <title>{{ $meta_title }}</title>
 
     <link href="{{ asset('public/frontend/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -20,6 +20,8 @@
     <link href="{{ asset('public/frontend/css/animate.css') }}" rel="stylesheet">
     <link href="{{ asset('public/frontend/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('public/frontend/css/responsive.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+
     <!--[if lt IE 9]>
         <script src="js/html5shiv.js"></script>
         <script src="js/respond.min.js"></script>
@@ -215,47 +217,19 @@
                         </ol>
 
                         <div class="carousel-inner">
-                            <div class="item active">
-                                {{-- <div class="col-sm-6">
-                                <h1><span>3CE</span>SHOP</h1>
-                                <h2>Free Commerce Template</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                                <button type="button" class="btn btn-default get">Get it now</button>
-                            </div>
-                            <div class="col-sm-6"> --}}
-                                <img src="{{ asset('public/frontend/images/slideshow_1.jpg') }}"
-                                    class="girl img-responsive" alt="" />
-                                {{-- <img src="#"  class="pricing" alt="" /> --}}
-                                {{-- </div> --}}
-                            </div>
-                            <div class="item">
-                                {{-- <div class="col-sm-6">
-                                <h1><span>3CE</span>-SHOP</h1>
-                                <h2>100% Responsive Design</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                                <button type="button" class="btn btn-default get">Get it now</button>
-                            </div>
-                            <div class="col-sm-6"> --}}
-                                <img src="{{ asset('public/frontend/images/slideshow_3.jpg') }}"
-                                    class="girl img-responsive" alt="" style="width:" />
-                                {{-- <img src="#"  class="pricing" alt="" /> --}}
-                                {{-- </div> --}}
-                            </div>
-                            <div class="item">
-                                {{-- <div class="col-sm-6">
-                                <h1><span>3CE</span>-SHOP</h1>
-                                <h2>100% Responsive Design</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                                <button type="button" class="btn btn-default get">Get it now</button>
-                            </div>
-                            <div class="col-sm-6"> --}}
-                                <img src="{{ asset('public/frontend/images/slideshow_2.jpg') }}"
-                                    class="girl img-responsive" alt="" />
-                                {{-- <img src="#"  class="pricing" alt="" /> --}}
-                                {{-- </div> --}}
-                            </div>
-
-
+                            @php
+                                $i = 0;
+                            @endphp
+                            @foreach ($slider as $key=>$slider)
+                                @php
+                                    $i++;
+                                @endphp
+                                <div class="item {{ $i == 1 ? 'active' : '' }}">
+                                    <div class="col-sm-12">
+                                        <img src="public/uploads/slider/{{ $slider->slider_image }}" class="girl img-responsive" alt="{{$slider->slider_desc}}" />
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
 
                         <a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
@@ -362,6 +336,8 @@
     <script src="{{ asset('public/frontend/js/price-range.js') }}"></script>
     <script src="{{ asset('public/frontend/js/jquery.prettyPhoto.js') }}"></script>
     <script src="{{ asset('public/frontend/js/main.js') }}"></script>
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    {!! Toastr::message() !!}
 </body>
 
 </html>

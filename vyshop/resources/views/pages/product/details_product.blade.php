@@ -87,7 +87,7 @@
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="details">
                     <p>{!! $product_details->product_desc !!}</p>
-                    <p>{!! $product_details->product_content !!}</p> {{-- Vì nội dụng có ký tự đặc biệt nên sẽ in lý tự đó --}}
+                   {{-- Vì nội dụng có ký tự đặc biệt nên sẽ in lý tự đó --}}
                 </div>
 
                 <div class="tab-pane fade" id="reviews">
@@ -97,7 +97,7 @@
                             <li><a href=""><i class="fa fa-clock-o"></i>12:41</a></li>
                             <li><a href=""><i class="fa fa-calendar-o"></i>2021</a></li>
                         </ul>
-                        <p><b>Write Your Review</b></p>
+                        <p><b>Viết đánh giá của bạn tại đây</b></p>
 
                         <form action="#">
                             <span>
@@ -138,12 +138,17 @@
                             <div class="product-image-wrapper">
                                 <div class="single-products">
                                     <div class="productinfo text-center">
-                                        <img src="{{ URL::to('public/uploads/product/' . $related->product_image) }}"
-                                            alt="" />
-                                        <h2>{{ number_format($related->product_price) . ' ' . 'vnđ' }}</h2>
-                                        <p>{{ $related->product_name }}</p>
-                                        <a href="#" class="btn btn-default add-to-cart"><i
-                                                class="fa fa-shopping-cart"></i>Thêm giỏ hàng</a>
+                                        <form action="{{ URL::to('/save-cart') }}" method="post">
+                                            {{ csrf_field() }}
+                                        <img src="{{URL::to('public/uploads/product/'.$related->product_image)}}" alt="" />
+                                        <input name="productid_hidden" type="hidden" value="{{ $related->product_id }}" />
+                                        <input name="qty" type="hidden" value= "1" />
+                                        <h2>{{number_format($related->product_price).' '.'vnđ'}}</h2>
+                                        <p>{{($related->product_name)}}</p>
+                                        <button type="submit" class="btn btn-default add-to-cart">
+                                            <a><i class="fa fa-shopping-cart"></i>Thêm giỏ hàng</a>
+                                        </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

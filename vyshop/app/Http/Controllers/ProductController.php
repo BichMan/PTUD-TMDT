@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use Brian2694\Toastr\Facades\Toastr;
+use App\Models\SliderModels;
 
 session_start();
 
@@ -43,7 +45,6 @@ class ProductController extends Controller {
 		$data['product_name'] = $request->product_name; //name tên cột
 		$data['product_price'] = $request->product_price;
 		$data['product_desc'] = $request->product_desc;
-		$data['product_content'] = $request->product_content;
 		$data['category_id'] = $request->product_cate;
 		$data['brand_id'] = $request->product_brand;
 		$data['product_status'] = $request->product_status;
@@ -59,33 +60,38 @@ class ProductController extends Controller {
 			$data['product_image'] = $new_image;
 
 			DB::table('tbl_product')->insert($data);
-			Session::put('message', 'Thêm sản phẩm thành công');
+			// Session::put('message', 'Thêm sản phẩm thành công');
+			Toastr::success('Thêm sản phẩm thành công', 'Successful!!');
 			return Redirect::to('add-product'); //Trở về trang all-product
 		}
 		$data['product_image'] = '';
 		DB::table('tbl_product')->insert($data);
-		Session::put('message', 'Thêm sản phẩm thành công');
+		// Session::put('message', 'Thêm sản phẩm thành công');
+		Toastr::success('Cập nhật sản phẩm thành công', 'Successful!!');
 		return Redirect::to('add-product'); //Trở về trang all-product
 	}
 
 	public function active_product($product_id) {
 		$this->Auth_Login();
 		DB::table('tbl_product')->where('product_id', $product_id)->update(['product_status' => 0]);
-		Session::put('message', 'Kích hoạt hiển thị sản phẩm thành công');
+		// Session::put('message', 'Kích hoạt hiển thị sản phẩm thành công');
+        Toastr::success('Hiển thị sản phẩm thành công', 'Successful!!');
 		return Redirect::to('all-product');
 	}
 
 	public function unactive_product($product_id) {
 		$this->Auth_Login();
 		DB::table('tbl_product')->where('product_id', $product_id)->update(['product_status' => 1]);
-		Session::put('message', 'Kích hoạt ẩn sản phẩm thành công');
+		// Session::put('message', 'Kích hoạt ẩn sản phẩm thành công');
+		Toastr::success('Ẩn sản phẩm thành công', 'Successful!!');
 		return Redirect::to('all-product');
 	}
 
 	public function delete_product($product_id) {
 		$this->Auth_Login();
 		DB::table('tbl_product')->where('product_id', $product_id)->delete();
-		Session::put('message', 'Xóa sản phẩm thành công');
+		// Session::put('message', 'Xóa sản phẩm thành công');
+		Toastr::success('Xóa sản phẩm thành công', 'Successful!!');
 		return Redirect::to('all-product');
 	}
 
@@ -107,7 +113,6 @@ class ProductController extends Controller {
 		$data['product_name'] = $request->product_name; //name tên cột
 		$data['product_price'] = $request->product_price;
 		$data['product_desc'] = $request->product_desc;
-		$data['product_content'] = $request->product_content;
 		$data['category_id'] = $request->product_cate;
 		$data['brand_id'] = $request->product_brand;
         $data['meta_keywords'] = $request->product_keywords;
@@ -123,17 +128,21 @@ class ProductController extends Controller {
 			$data['product_image'] = $new_image;
 
 			DB::table('tbl_product')->where('product_id', $product_id)->update($data);
-			Session::put('message', 'Cập nhật sản phẩm thành công');
+			// Session::put('message', 'Cập nhật sản phẩm thành công');
+			Toastr::success('Cập nhật sản phẩm thành công', 'Successful!!');
 			return Redirect::to('all-product'); //Trở về trang all-product
 		}
 		DB::table('tbl_product')->where('product_id', $product_id)->update($data);
-		Session::put('message', 'Cập nhật sản phẩm thành công');
+		// Session::put('message', 'Cập nhật sản phẩm thành công');
+		Toastr::success('Cập nhật sản phẩm thành công', 'Successful!!');
 		return Redirect::to('all-product'); //Trở về trang all-product
 
 	}
 //End admin pages
 	//Details product home
 	public function details_product($product_id, Request $request) {
+		$slider = SliderModels::orderBy('slider_id','DESC')->where('slider_status','0')->take(4)->get();
+		$slider = SliderModels::orderBy('slider_id','DESC')->where('slider_status','0')->take(4)->get();
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
 		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
@@ -158,7 +167,8 @@ class ProductController extends Controller {
 		//tru san pham da xem whereNotIn
 
 		return view('pages.product.details_product')->with('category', $cate_product)->with('brand', $brand_product)->with('product_details', $details_product)->with('relate', $related_product)
-        ->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical);
+        ->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical)
+		->with('slider',$slider);
 
 	}
 }

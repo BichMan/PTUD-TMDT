@@ -11,7 +11,6 @@
             <div class="table-responsive cart_info">
                 <?php
                 $content = Cart::content();
-
                 ?>
                 <table class="table table-condensed">
                     <thead>
@@ -41,7 +40,7 @@
                                 </td>
                                 <td class="cart_quantity">
                                     <div class="cart_quantity_button">
-                                        <form action="{{ URL::to('/update-quantity-cart') }}" method="POST">
+                                        <form action="{{ URL::to('/update-quantity-cart') }}" method="post">
                                             {{ csrf_field() }}
                                             <input class="cart_quantity_input" type="text" name="cart_quantity"
                                                 value="{{ $v_content->qty }}" size="2">

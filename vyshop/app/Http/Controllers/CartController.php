@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use  Gloudemans\Shoppingcart\Facades\Cart;
+use Brian2694\Toastr\Facades\Toastr;
+use App\Models\SliderModels;
 
 session_start();
 
@@ -29,10 +31,14 @@ class CartController extends Controller
         Cart::add($data);
         Cart::setGlobalTax(0);
         // Cart::destroy();
-        return Redirect::to('/show-cart');
+        $url_canonical = $request->url();
+        Toastr::success('Thêm sản phẩm thành công', 'Successful!!');
+        return redirect()->back();
     }
     public function show_cart(Request $request)
     {
+		$slider = SliderModels::orderBy('slider_id','DESC')->where('slider_status','0')->take(4)->get();
+
         $cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
         $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
@@ -42,11 +48,12 @@ class CartController extends Controller
         $meta_title = "Giỏ hàng";
         $url_canonical = $request->url();
         return view('pages.cart.show_cart')->with('category', $cate_product)->with('brand', $brand_product)
-            ->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical);
+            ->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)->with('slider',$slider);
     }
     public function delete_cart($rowId)
     {
         Cart::remove($rowId);
+        Toastr::info('Xoá thành công!!');
         return Redirect::to('/show-cart');
     }
 

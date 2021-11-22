@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Session;
 use App\Rules\CaptchaRule;
 use Validator;
 use Socialite;
+use Brian2694\Toastr\Facades\Toastr;
+
 
 session_start();
 
@@ -59,6 +61,7 @@ class AdminController extends Controller
 			Session::put('admin_id', $login->admin_id);
 			return Redirect::to('/dashboard');
 		} else{
+			// Toastr::error('Mật khẩu hoặc tài khoản sai. Vui lòng nhập lại', 'Cảnh báo!!');
 			Session::put('message', 'Mật khẩu hoặc tài khoản sai. Vui lòng nhập lại');
 			return Redirect::to('/admin');
 		}
