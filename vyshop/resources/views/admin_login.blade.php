@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="Visitors Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
  Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
- <link rel="shortcut icon" type="image/png" href="{{ asset('public/backend/images/icon_admin.jpg') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('public/backend/images/admin2.png') }}" />
     <!-- bootstrap-css -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <!-- //bootstrap-css -->
@@ -45,7 +45,7 @@
                 @endforeach
                 <input type="text" class="ggg" name="admin_email" placeholder="E-MAIL">
                 <input type="password" class="ggg" name="admin_password" placeholder="PASSWORD">
-                <a href="#">Quên mật khẩu?</a>
+                {{-- <a href="#">Quên mật khẩu?</a> --}}
                 <div class="clearfix"></div>
                 <input type="submit" value="Đăng nhập" name="login">
                 <a style="font-size:18px" href="{{ URL::to('/login-facebook') }}">Login Facebook</a> |

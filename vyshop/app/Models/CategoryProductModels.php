@@ -12,4 +12,7 @@ class CategoryProductModels extends Model
    protected $fillable = ['category_name','category_desc', 'category_status', 'meta_keywords'];
    protected $primaryKey = 'category_id';
    protected $table = 'tbl_category_product';
+   public function category(){
+    $this->hasMany('App\Models\ProductModels');
+}
 }

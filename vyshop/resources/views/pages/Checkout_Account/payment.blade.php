@@ -15,7 +15,6 @@
             <div class="table-responsive cart_info">
                 <?php
                 $content = Cart::content();
-
                 ?>
                 <table class="table table-condensed">
                     <thead>
@@ -79,13 +78,10 @@
                 {{ csrf_field() }}
                 <div class="payment-options">
                     <span>
-                        <label><input type="radio" name="payment_option" value="1"> Thanh toán bằng thẻ ATM</label>
-                    </span>
-                    <span>
                         <label><input type="radio" name="payment_option" value="2"> Thanh toán khi nhận hàng</label>
                     </span>
                     <span>
-                        <label><input type="radio" name="payment_option" value="3"> Thanh toán bằng Momo</label>
+                        <label><input type="radio" name="payment_option" value="3"> Thanh toán bằng Paypal</label>
                     </span>
                     <input type="submit" value="Đặt hàng" class="btn btn-primary btn-sm" name="send_oder_place"
                         style="margin-top:0">

@@ -8,6 +8,8 @@
                     <li class="active">Giỏ hàng của bạn</li>
                 </ol>
             </div>
+            <a name="subscribe"></a>
+
             <div class="table-responsive cart_info">
                 <?php
                 $content = Cart::content();

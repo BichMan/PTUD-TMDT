@@ -13,6 +13,13 @@
     <link rel="shortcut icon" type="image/png" href="{{ asset('public/frontend/images/icon.png') }}" />
     <title>{{ $meta_title }}</title>
 
+    {{-- <meta property="og:image" content="{{$image_og}}" /> --}}
+    <meta property="og:site_name" content="VYShop.com" />
+    <meta property="og:description" content="{{ $meta_desc }}" />
+    <meta property="og:title" content="{{ $meta_title }}" />
+    <meta property="og:url" content="{{ $url_canonical }}" />
+    <meta property="og:type" content="website" />
+
     <link href="{{ asset('public/frontend/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('public/frontend/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('public/frontend/css/prettyPhoto.css') }}" rel="stylesheet">
@@ -20,6 +27,7 @@
     <link href="{{ asset('public/frontend/css/animate.css') }}" rel="stylesheet">
     <link href="{{ asset('public/frontend/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('public/frontend/css/responsive.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('public/frontend/css/sweetalert.css') }}" rel="stylesheet"> --}}
     <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
     <!--[if lt IE 9]>
@@ -46,19 +54,17 @@
                     <div class="col-sm-6">
                         <div class="contactinfo">
                             <ul class="nav nav-pills">
-                                <li><a href="#"><i class="fa fa-phone"></i>0365610122</a></li>
-                                <li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+                                <li><a><i class="fa fa-phone"></i>0385870243</a></li>
+                                <li><a><i class="fa fa-envelope"></i> tranbichman2000@gmail.com</a></li>
+
                             </ul>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="social-icons pull-right">
                             <ul class="nav navbar-nav">
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                <li><a href="https://www.facebook.com/shopenvy/"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="https://www.google.com.vn/"><i class="fa fa-google-plus"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -66,96 +72,6 @@
             </div>
         </div>
         <!--/header_top-->
-        <div class="header-middle">
-            <!--header-middle-->
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="logo pull-left">
-                            <a href="index.html"><img src="images/home/logo.png" alt="" /></a>
-                        </div>
-                        <div class="btn-group pull-right">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle usa"
-                                    data-toggle="dropdown">
-                                    USA
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Canada</a></li>
-                                    <li><a href="#">UK</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle usa"
-                                    data-toggle="dropdown">
-                                    DOLLAR
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Canadian Dollar</a></li>
-                                    <li><a href="#">Pound</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="shop-menu pull-right">
-                            <ul class="nav navbar-nav">
-                                <li><a href="#"><i class="fa fa-star"></i> Yêu thích</a></li>
-                                <?php
-                                    $customer_id =Session::get('customer_id');
-                                    $shipping_id =Session::get('shipping_id');
-                                    if($customer_id!=NULL && $shipping_id ==NULL)
-                                    {
-                                ?>
-                                <li><a href="{{ URL::to('/checkout') }}"><i class="fa fa-crosshairs"></i> Thanh
-                                        toán</a></li>
-                                {{-- điền thông tin vận chuyển --}}
-                                <?php
-                                    }
-                                    elseif($customer_id!=NULL && $shipping_id!=NULL)
-                                    {
-                                ?>
-                                <li><a href="{{ URL::to('/payment') }}"><i class="fa fa-crosshairs"></i> Thanh toán</a>
-                                </li>
-                                <?php
-                                    }
-                                    else
-                                    {
-                                ?>
-                                <li><a href="{{ URL::to('/login-checkout') }}"><i class="fa fa-lock"></i> Thanh
-                                        toán</a></li>
-                                <?php
-                                    }
-                                ?>
-
-                                <li><a href="{{ URL::to('/show-cart') }}"><i class="fa fa-shopping-cart"></i> Giỏ
-                                        hàng</a></li>
-                                <?php
-                                    $customer_id =Session::get('customer_id');
-                                    if($customer_id!=NULL){
-                                ?>
-                                <li><a href="{{ URL::to('/logout-checkout') }}"><i class="fa fa-lock"></i> Đăng
-                                        xuất</a></li>
-
-                                <?php
-                                    } else{
-                                ?>
-                                <li><a href="{{ URL::to('/login-checkout') }}"><i class="fa fa-lock"></i> Đăng
-                                        nhập</a></li>
-                                <?php
-                                    }
-                                ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/header-middle-->
-
         <div class="header-bottom">
             <!--header-bottom-->
             <div class="container">
@@ -175,15 +91,67 @@
                                 <li><a href="{{ URL::to('/trang-chu') }}" class="active">Trang chủ</a></li>
                                 <li class="dropdown"><a href="#">Sản phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="{{ URL::to('/trang-chu') }}">Products</a></li>
-
+                                        @foreach ($category as $key => $danhmuc)
+                                            <li><a
+                                                    href="{{ URL::to('/danh-muc-san-pham/' . $danhmuc->meta_keywords) }}">{{ $danhmuc->category_name }}</a>
+                                            </li>
+                                        @endforeach
                                     </ul>
                                 </li>
                                 <li class="dropdown"><a href="#">Tin tức<i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                        @foreach ($category_post as $key => $cate_post)
+                                            <li><a
+                                                    href="{{ URL::to('/danh-muc-bai-viet/' . $cate_post->cate_post_slug) }}">{{ $cate_post->cate_post_name }}</a>
+                                            </li>
+                                        @endforeach
 
+                                    </ul>
                                 </li>
                                 {{-- <li><a href="{{URL::to('/show-cart')}}">Giỏ hàng</a></li> --}}
-                                <li><a href="#">Liên hệ</a></li>
+                                {{-- <li><a href="#">Liên hệ</a></li> --}}
+                                <?php
+                                    $customer_id =Session::get('customer_id');
+                                    $shipping_id =Session::get('shipping_id');
+                                    if($customer_id!=NULL && $shipping_id ==NULL)
+                                    {
+                                ?>
+                                <li><a href="{{ URL::to('/checkout') }}"> Thanh
+                                        toán</a></li>
+                                {{-- điền thông tin vận chuyển --}}
+                                <?php
+                                    }
+                                    elseif($customer_id!=NULL && $shipping_id!=NULL)
+                                    {
+                                ?>
+                                <li><a href="{{ URL::to('/payment') }}">Thanh toán</a>
+                                </li>
+                                <?php
+                                    }
+                                    else
+                                    {
+                                ?>
+                                <li><a href="{{ URL::to('/login-checkout') }}">Thanh toán</a></li>
+                                <?php
+                                    }
+                                ?>
+
+                                <li><a href="{{ URL::to('/show-cart') }}">Giỏ hàng</a></li>
+                                <?php
+                                    $customer_id =Session::get('customer_id');
+                                    if($customer_id!=NULL){
+                                ?>
+                                <li><a href="{{ URL::to('/logout-checkout') }}">
+                                        Đăng
+                                        xuất</a></li>
+
+                                <?php
+                                    } else{
+                                ?>
+                                <li><a href="{{ URL::to('/login-checkout') }}">Đăng nhập</a></li>
+                                <?php
+                                    }
+                                ?>
                             </ul>
                         </div>
                     </div>
@@ -220,13 +188,14 @@
                             @php
                                 $i = 0;
                             @endphp
-                            @foreach ($slider as $key=>$slider)
+                            @foreach ($slider as $key => $slide)
                                 @php
                                     $i++;
                                 @endphp
                                 <div class="item {{ $i == 1 ? 'active' : '' }}">
                                     <div class="col-sm-12">
-                                        <img src="public/uploads/slider/{{ $slider->slider_image }}" class="girl img-responsive" alt="{{$slider->slider_desc}}" />
+                                        <img src={{ asset('public/uploads/slider/' . $slide->slider_image) }}
+                                            class="girl img-responsive" alt="{{ $slide->slider_desc }}" />
                                     </div>
                                 </div>
                             @endforeach
@@ -249,7 +218,7 @@
     <section>
         <div class="container">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12 padding-right">
                     @yield('cart_content')
                 </div>
             </div>
@@ -260,59 +229,36 @@
         <div class="footer-widget">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                         <div class="single-widget">
                             <h2>DỊCH VỤ</h2>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Trợ giúp trực tuyến</a></li>
-                                <li><a href="#">Liên hệ chúng tôi</a></li>
-                                <li><a href="#">Tình trạng đặt hàng</a></li>
-                                <li><a href="#">Thay đổi địa điểm</a></li>
-                                <li><a href="#">Câu hỏi thường gặp</a></li>
+                                <li><a>Liên hệ chúng tôi</a></li>
+                                <li><a>SĐT: 0385870244</a></li>
+                                <li><a>Hoặc qua Email</a></li>
+                                <li><a>tranbichman@gmail.com</a></li>
+                                <li><a href="https://www.facebook.com/shopenvy">Facebook tại đây</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-sm-2">
-                        <div class="single-widget">
-                            <h2>SHOP</h2>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Áo thun</a></li>
-                                <li><a href="#">Quần</a></li>
-                                <li><a href="#">Giày</a></li>
-                                <li><a href="#">Thẻ quà tặng</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="single-widget">
-                            <h2>CHÍNH SÁCH</h2>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Điều khoản sử dụng</a></li>
-                                <li><a href="#">Chính sách hoàn lại tiền</a></li>
-                                <li><a href="#">Hệ thống thanh toán</a></li>
-                                <li><a href="#">Hệ thống thanh toán</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                         <div class="single-widget">
                             <h2>GIỚI THIỆU</h2>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Thông tin công ty</a></li>
-                                <li><a href="#">Vị trí cửa hàng</a></li>
-                                <li><a href="#">Chương trình liên kết</a></li>
-                                <li><a href="#">Bản quyền</a></li>
+                                <li><a>Thông tin công ty</a></li>
+                                <li><a>CÔNG TY THIẾT KẾ THỜI TRANG VY</a></li>
+                                <li><a>HỆ THỐNG CỬA HÀNG</a></li>
+                                <li><a>CN1: 218-220 Quang Trung, P.10, Q.Gò Vấp</a></li>
+                                <li><a>CN2: 535 Nguyễn Tri Phương P.8 Q.10</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-sm-offset-1">
-                        <div class="single-widget">
-                            <form action="#" class="searchform">
-                                <input type="text" placeholder="Your email address" />
-                                <button type="submit" class="btn btn-default"><i
-                                        class="fa fa-arrow-circle-o-right"></i></button>
-                                <p>Góp ý của bạn đối với chất lượng Shop</p>
-                            </form>
+                    <div class="col-sm-4 pull-right">
+                        <div class="fb-page" data-href="https://www.facebook.com/shopenvy" data-tabs="timeline"
+                            data-width="500" data-height="250" data-small-header="true"
+                            data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="true">
+                            <blockquote cite="https://www.facebook.com/shopenvy" class="fb-xfbml-parse-ignore"><a
+                                    href="https://www.facebook.com/shopenvy">ENVY</a></blockquote>
                         </div>
                     </div>
 
@@ -336,8 +282,22 @@
     <script src="{{ asset('public/frontend/js/price-range.js') }}"></script>
     <script src="{{ asset('public/frontend/js/jquery.prettyPhoto.js') }}"></script>
     <script src="{{ asset('public/frontend/js/main.js') }}"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0&appId=300995878694592&autoLogAppEvents=1"
+        nonce="UciBqcPi"></script>
+    {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
     <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
+    {{-- <script>
+        $(document).ready(function(){
+            $('.add-to-cart').click(function(){
+                swal("Hello world!");
+            });
+        });
+    </script> --}}
 </body>
 
 </html>

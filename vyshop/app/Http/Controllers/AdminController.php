@@ -66,22 +66,6 @@ class AdminController extends Controller
 			return Redirect::to('/admin');
 		}
 
-		// $admin_email = $request->admin_email;
-		// $admin_password = md5($request->admin_password); //mật khẩu mã hóa kiểu md5 zip
-
-		// $result = DB::table('tbl_admin')->where('admin_email',$admin_email)->where('admin_password',$admin_password)->first(); //lấy giới hạn 1 user
-		// if($result){
-		//     Session::put('admin_name',$result->admin_name);
-		//     Session::put('admin_id',$result->admin_id);
-		//     return Redirect::to('/dashboard');
-		// }else{
-		//     Session::put('message','Mật khẩu hoặc tài khoản sai. Vui lòng nhập lại');
-		//     return Redirect::to('/admin');
-		// }
-
-		// echo '<pre>';
-		// print_r ($result);
-		// echo '</pre>';
 	}
 	public function logout()
 	{
@@ -189,10 +173,6 @@ class AdminController extends Controller
 
 			$customer_new->save();
 			return $customer_new;
-			// $account_name = AdminModels::where('admin_id', $authUser->user)->first();
-			// Session::put('admin_name', $account_name->admin_name);
-			// Session::put('admin_id', $account_name->admin_id);
-			// return redirect('/dashboard')->with('message', 'Đăng nhập Admin thành công');
 		}
 	}
 }

@@ -8,47 +8,70 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Models\SliderModels;
+use App\Models\PostCategoryModels;
+use App\Models\ProductModels;
 
 session_start();
 
-class ProductController extends Controller {
-	public function Auth_Login() {
+class ProductController extends Controller
+{
+	public function Auth_Login()
+	{
 		$admin_id = Session::get('admin_id');
 		if ($admin_id) {
 			return Redirect::to('dashboard');
 		} else {
 			return Redirect::to('admin')->send();
 		}
-
 	}
-	public function add_product() {
+	public function add_product()
+	{
 		$this->Auth_Login();
 		$cate_product = DB::table('tbl_category_product')->orderby('category_id', 'desc')->get();
 		$brand_product = DB::table('tbl_brand')->orderby('brand_id', 'desc')->get();
 
-		return view('admin.add_product')->with('cate_product', $cate_product)->with('brand_product', $brand_product);
+		return view('admin.product.add_product')->with('cate_product', $cate_product)->with('brand_product', $brand_product);
 	}
 
-	public function all_product() {
+	public function all_product()
+	{
 		$this->Auth_Login();
 		$all_product = DB::table('tbl_product')
 			->join('tbl_category_product', 'tbl_category_product.category_id', '=', 'tbl_product.category_id')
 			->join('tbl_brand', 'tbl_brand.brand_id', '=', 'tbl_product.brand_id')
-			->orderby('product_id', 'desc')->get();
-		$manager_product = view('admin.all_product')->with('all_product', $all_product);
-		return view('admin_layout')->with('admin.all_product', $manager_product);
+			->orderby('product_id', 'desc')->paginate(5);
+		$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
+		return view('admin_layout')->with('admin.product.all_product', $manager_product);
 	}
 
-	public function save_product(Request $request) {
+	public function save_product(Request $request)
+	{
 		$this->Auth_Login();
-		$data = array();
-		$data['product_name'] = $request->product_name; //name tên cột
-		$data['product_price'] = $request->product_price;
-		$data['product_desc'] = $request->product_desc;
-		$data['category_id'] = $request->product_cate;
-		$data['brand_id'] = $request->product_brand;
-		$data['product_status'] = $request->product_status;
-        $data['meta_keywords'] = $request->product_keywords;
+		$data = $request->validate([
+			'product_keywords' => 'required',
+			'product_name' => 'required|unique:tbl_product',
+			'product_price' => 'required',
+			'product_desc' => 'required',
+			'product_cate' => 'required',
+			'product_brand' => 'required',
+			'product_status' => 'required',
+			'product_image' => 'required',
+		], [
+			'product_name.unique' => 'Tên sản phẩm đã tồn tại.',
+			'product_name.reqired' => ' Thêm tên sản phẩm.',
+			'product_price.required' => ' Thêm giá sản phẩm.',
+			'product_desc.required' => ' Thêm mô tả sản phẩm.',
+			'product_image.required' => ' Thêm hình ảnh sản phẩm.',
+		]);
+		$product = new ProductModels();
+		$product->product_name = $data['product_name'];
+		$product->product_price = $data['product_price'];
+		$product->product_desc = $data['product_desc'];
+		$product->category_id = $data['product_cate'];
+		$product->brand_id = $data['product_brand'];
+		$product->product_status = $data['product_status'];
+		$product->meta_keywords = $data['product_keywords'];
+
 		$get_image = $request->file('product_image');
 
 		if ($get_image) {
@@ -57,57 +80,62 @@ class ProductController extends Controller {
 			$new_image = $name_image . rand(0, 99) . '.' . $get_image->getClientOriginalExtension(); //đuôi . mở rộng của ảnh
 			//rand tránh trùng ảnh khi upload
 			$get_image->move('public/uploads/product', $new_image); //di chuyển upload
-			$data['product_image'] = $new_image;
 
-			DB::table('tbl_product')->insert($data);
+			$data['product_image'] = $new_image;
+			$product->product_image = $data['product_image'];
+			$product->save();
 			// Session::put('message', 'Thêm sản phẩm thành công');
 			Toastr::success('Thêm sản phẩm thành công', 'Successful!!');
 			return Redirect::to('add-product'); //Trở về trang all-product
 		}
-		$data['product_image'] = '';
-		DB::table('tbl_product')->insert($data);
-		// Session::put('message', 'Thêm sản phẩm thành công');
-		Toastr::success('Cập nhật sản phẩm thành công', 'Successful!!');
-		return Redirect::to('add-product'); //Trở về trang all-product
+		else{
+			Toastr::warning('Vui lòng thêm ảnh', 'Cảnh báo!!');
+			return Redirect::to('add-product'); //Trở về trang all-product
+		}
 	}
 
-	public function active_product($product_id) {
+	public function active_product($product_id)
+	{
 		$this->Auth_Login();
 		DB::table('tbl_product')->where('product_id', $product_id)->update(['product_status' => 0]);
 		// Session::put('message', 'Kích hoạt hiển thị sản phẩm thành công');
-        Toastr::success('Hiển thị sản phẩm thành công', 'Successful!!');
-		return Redirect::to('all-product');
+		Toastr::success('Hiển thị sản phẩm thành công', 'Successful!!');
+		return redirect()->back();
 	}
 
-	public function unactive_product($product_id) {
+	public function unactive_product($product_id)
+	{
 		$this->Auth_Login();
 		DB::table('tbl_product')->where('product_id', $product_id)->update(['product_status' => 1]);
 		// Session::put('message', 'Kích hoạt ẩn sản phẩm thành công');
 		Toastr::success('Ẩn sản phẩm thành công', 'Successful!!');
-		return Redirect::to('all-product');
+		return redirect()->back();
 	}
 
-	public function delete_product($product_id) {
+	public function delete_product($product_id)
+	{
 		$this->Auth_Login();
 		DB::table('tbl_product')->where('product_id', $product_id)->delete();
 		// Session::put('message', 'Xóa sản phẩm thành công');
 		Toastr::success('Xóa sản phẩm thành công', 'Successful!!');
-		return Redirect::to('all-product');
+		return redirect()->back();
 	}
 
-	public function edit_product($product_id) {
+	public function edit_product($product_id)
+	{
 		$this->Auth_Login();
 		$cate_product = DB::table('tbl_category_product')->orderby('category_id', 'desc')->get();
 		$brand_product = DB::table('tbl_brand')->orderby('brand_id', 'desc')->get();
 
 		$edit_product = DB::table('tbl_product')->where('product_id', $product_id)->get();
 
-		$manager_product = view('admin.edit_product')->with('edit_product', $edit_product)
+		$manager_product = view('admin.product.edit_product')->with('edit_product', $edit_product)
 			->with('cate_product', $cate_product)->with('brand_product', $brand_product);
 
-		return view('admin_layout')->with('admin.edit_product', $manager_product);
+		return view('admin_layout')->with('admin.product.edit_product', $manager_product);
 	}
-	public function update_product(Request $request, $product_id) {
+	public function update_product(Request $request, $product_id)
+	{
 		$this->Auth_Login();
 		$data = array();
 		$data['product_name'] = $request->product_name; //name tên cột
@@ -115,7 +143,7 @@ class ProductController extends Controller {
 		$data['product_desc'] = $request->product_desc;
 		$data['category_id'] = $request->product_cate;
 		$data['brand_id'] = $request->product_brand;
-        $data['meta_keywords'] = $request->product_keywords;
+		$data['meta_keywords'] = $request->product_keywords;
 		// $data['product_status'] = $request->product_status;
 		$get_image = $request->file('product_image');
 
@@ -138,37 +166,35 @@ class ProductController extends Controller {
 		return Redirect::to('all-product'); //Trở về trang all-product
 
 	}
-//End admin pages
+	//End admin pages
 	//Details product home
-	public function details_product($product_id, Request $request) {
-		$slider = SliderModels::orderBy('slider_id','DESC')->where('slider_status','0')->take(4)->get();
-		$slider = SliderModels::orderBy('slider_id','DESC')->where('slider_status','0')->take(4)->get();
+	public function details_product($meta_keywords, Request $request)
+	{
+		$category_post = DB::table('tbl_category_post')->where('cate_post_status', '0')->get();
+
+		$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
 		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
 
-		$details_product = DB::table('tbl_product')
-			->join('tbl_category_product', 'tbl_category_product.category_id', '=', 'tbl_product.category_id')
-			->join('tbl_brand', 'tbl_brand.brand_id', '=', 'tbl_product.brand_id')
-			->where('tbl_product.product_id', $product_id)->get();
+        $pro = ProductModels::where('meta_keywords',$meta_keywords)->take(1)->get();
 
-		foreach($details_product as $key => $val){
+		foreach ($pro as $key => $val) {
+			$id = $val->product_id;
 			$category_id = $val->category_id;
-            $meta_desc = $val->category_desc;
-            $meta_keywords = $val->meta_keywords;
-            $meta_title =$val->product_name;
-            $url_canonical =$request->url();
-        }
+			$brand_id = $val->brand_id;
+			$meta_desc = $val->category_desc;
+			$meta_keywords = $val->meta_keywords;
+			$meta_title = $val->product_name;
+			$url_canonical = $request->url();
+
+		}
+		$details_product = ProductModels::with('category_product')->with('brand_product')->where('product_status', 0)->where('product_id', $id)->where('brand_id', $brand_id)->where('category_id', $category_id)->get();
+
 		//san pham lien quan
-		$related_product = DB::table('tbl_product')
-			->join('tbl_category_product', 'tbl_category_product.category_id', '=', 'tbl_product.category_id')
-			->join('tbl_brand', 'tbl_brand.brand_id', '=', 'tbl_product.brand_id')
-			->where('tbl_category_product.category_id', $category_id)->whereNotIn('tbl_product.product_id', [$product_id])->get();
-		//tru san pham da xem whereNotIn
-
+		$related_product = ProductModels::with('category_product')->with('brand_product')->where('product_status', 0)->where('category_id', $category_id)->whereNotIn('product_id', [$id])->get();
 		return view('pages.product.details_product')->with('category', $cate_product)->with('brand', $brand_product)->with('product_details', $details_product)->with('relate', $related_product)
-        ->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical)
-		->with('slider',$slider);
-
+			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
+			->with('slider', $slider)->with('category_post', $category_post);
 	}
 }

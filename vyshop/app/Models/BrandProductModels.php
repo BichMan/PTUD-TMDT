@@ -12,5 +12,7 @@ class BrandProductModels extends Model
    protected $fillable = ['brand_name','brand_desc', 'brand_status', 'meta_keywords'];
    protected $primaryKey = 'brand_id';
    protected $table = 'tbl_brand';
-
+   public function brand(){
+      $this->hasMany('App\Models\ProductModels');
+  }
 }

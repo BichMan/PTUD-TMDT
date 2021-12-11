@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Redirect;
 use  Gloudemans\Shoppingcart\Facades\Cart;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Models\SliderModels;
+use App\Models\PostCategoryModels;
+use App\Models\CustomerModels;
 
 session_start();
 
@@ -26,6 +28,8 @@ class CheckoutController extends Controller
 	}
 	public function login_checkout(Request $request)
 	{
+		$category_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->where('cate_post_status', '0')->get();
+
 		$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
 
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
@@ -39,27 +43,49 @@ class CheckoutController extends Controller
 
 		return view('pages.Checkout_Account.login_checkout')->with('category', $cate_product)->with('brand', $brand_product)
 			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
-			->with('slider', $slider);
+			->with('slider', $slider)->with('category_post', $category_post);
 	}
 
 	public function add_customer(Request $request)
 	{
-		$data = array();
-		$data['customer_name'] = $request->customer_name;
-		$data['customer_email'] = $request->customer_email;
-		$data['customer_password'] = md5($request->customer_password);
-		$data['customer_phone'] = $request->customer_phone;
+		$data = $request->validate([
+			'customer_email' => 'required|unique:tbl_customer|max:255',
+			'customer_name' => 'required|unique:tbl_customer',
+			'customer_password' => 'required',
+			'customer_phone' => 'required',
+		], [
+			'customer_email.unique' => 'Tài khoản đã được sử dụng.',
+			'customer_email.required' => ' Thêm email.',
+			'customer_name.unique' => ' Tài khoản đã được sử dụng.',
+			'customer_name.required' => ' Thêm tên tài khoản.',
+			'customer_password.required' => ' Thêm mật khẩu.',
+			'customer_phone.required' => ' Thêm số điện thoai.'
+		]);
+		// $data = array();
+		// $data['customer_name'] = $request->customer_name;
+		// $data['customer_email'] = $request->customer_email;
+		// $data['customer_password'] = md5($request->customer_password);
+		// $data['customer_phone'] = $request->customer_phone;
 
-		$customer_id = DB::table('tbl_customer')->insertGetId($data);
+		// $customer_id = DB::table('tbl_customer')->insertGetId($data);
+		$customer = new CustomerModels();
+		$customer->customer_name = $data['customer_name'];
+		$customer->customer_email = $data['customer_email'];
+		$customer->customer_password = md5($data['customer_password']);
+		$customer->customer_phone = $data['customer_phone'];
+		$customer->save();
+		// $customer_id = DB::table('tbl_customer')->insertGetId($data);
 
-		Session::put('customer_id', $customer_id);
+		Session::put('customer_id', $customer->customer_id);
 		Session::put('customer_name', $request->customer_name);
-
-		return Redirect::to('/checkout');
+		Session::put('message_signup', 'Đăng ký thành công. Hãy đăng nhập nào.');
+		return Redirect::to('/login-checkout');
 	}
 
 	public function checkout(Request $request)
 	{
+		$category_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->where('cate_post_status', '0')->get();
+
 		$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
 
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
@@ -72,7 +98,7 @@ class CheckoutController extends Controller
 		$url_canonical = $request->url();
 		return view('pages.Checkout_Account.checkout')->with('category', $cate_product)->with('brand', $brand_product)
 			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
-			->with('slider', $slider);
+			->with('slider', $slider)->with('category_post', $category_post);
 	}
 
 	public function save_customer(Request $request)
@@ -93,6 +119,7 @@ class CheckoutController extends Controller
 
 	public function payment(Request $request)
 	{
+		$category_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->where('cate_post_status', '0')->get();
 		$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
 
 		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
@@ -105,7 +132,7 @@ class CheckoutController extends Controller
 		$url_canonical = $request->url();
 		return view('pages.Checkout_Account.payment')->with('category', $cate_product)->with('brand', $brand_product)
 			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
-			->with('slider', $slider);
+			->with('slider', $slider)->with('category_post', $category_post);
 	}
 
 	public function logout_checkout()
@@ -144,7 +171,7 @@ class CheckoutController extends Controller
 		$data_order['shipping_id'] = Session::get('shipping_id');
 		$data_order['payment_id'] = $payment_id;
 		$data_order['order_total'] = Cart::total();
-		$data_order['order_status'] = 'Đang chờ xử lý';
+		$data_order['order_status'] = 0;
 		$order_id = DB::table('tbl_order')->insertGetId($data_order);
 
 		//insetr details order
@@ -159,14 +186,10 @@ class CheckoutController extends Controller
 			DB::table('tbl_order_details')->insertGetId($data_details_order);
 		}
 
-		if ($data['payment_method'] == 1) {
-			$meta_desc = "Thanh toán thành công";
-			$meta_keywords = "Thanh toán Thành Công";
-			$meta_title = "Thanh toán Thành Công";
-			$url_canonical = $request->url();
-			echo 'Thanh toán bằng ATM';
-		} elseif ($data['payment_method'] == 2) {
+		if ($data['payment_method'] == 2) {
 			Cart::destroy();
+			$category_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->where('cate_post_status', '0')->get();
+
 			$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
 
 			$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
@@ -180,7 +203,7 @@ class CheckoutController extends Controller
 
 			return view('pages.Checkout_Account.handcash')->with('category', $cate_product)->with('brand', $brand_product)
 				->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
-				->with('slider', $slider);
+				->with('slider', $slider)->with('category_post', $category_post);
 		} else {
 			$meta_desc = "Thanh toán thành công";
 			$meta_keywords = "Thanh toán Thành Công";
@@ -198,41 +221,36 @@ class CheckoutController extends Controller
 			->join('tbl_customer', 'tbl_order.customer_id', '=', 'tbl_customer.customer_id')
 			->select('tbl_order.*', 'tbl_customer.customer_name')
 			->orderby('tbl_order.order_id', 'desc')->get();
-		$manager_order = view('admin.manage_order')->with('all_order', $all_order);
-		return view('admin_layout')->with('admin.manage_order', $manager_order);
+		$manager_order = view('admin.order_details.manage_order')->with('all_order', $all_order);
+		return view('admin_layout')->with('admin.order_details.manage_order', $manager_order);
 	}
 
-	public function view_order($orderid)
+	public function view_order($order_id)
 	{
 		$this->Auth_Login();
-		$order_by_id = DB::table('tbl_order')
+		$order_by_id = DB::table('tbl_order')->where('tbl_order.order_id', $order_id)
 			->join('tbl_customer', 'tbl_order.customer_id', '=', 'tbl_customer.customer_id')
 			->join('tbl_shipping', 'tbl_order.shipping_id', '=', 'tbl_shipping.shipping_id')
 			->join('tbl_order_details', 'tbl_order.order_id', '=', 'tbl_order_details.order_id')
 			->select('tbl_order.*', 'tbl_customer.*', 'tbl_shipping.*', 'tbl_order_details.*')->first();
-
-		$manager_order_by_id = view('admin.view_order')->with('order_by_id', $order_by_id);
-		return view('admin_layout')->with('admin.view_order', $manager_order_by_id);
+		$order_pro = DB::table('tbl_order_details')->where('tbl_order_details.order_id', $order_id)->get();
+		$manager_order_by_id = view('admin.order_details.view_order')->with('order_by_id', $order_by_id)->with('order_pro', $order_pro);
+		return view('admin_layout')->with('admin.order_details.view_order', $manager_order_by_id);
 	}
 
-//Quên mật khẩu
-	public function quen_mat_khau(Request $request){
-		$meta_desc = "Quên mật khẩu";
-		$meta_keywords = "Quên mật khẩu";
-		$meta_title ="Quên mật khẩu";
-		$url_canonical =$request->url();
-
-		$slider = SliderModels::orderBy('slider_id','DESC')->where('slider_status','0')->take(4)->get();
-		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
-		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
-
-		$all_product = DB::table('tbl_product')->where('product_status', '0')->orderby('product_id', 'desc')->limit(12)->get();
-		return view('pages.Checkout_Account.forget_pass')->with('category', $cate_product)->with('brand', $brand_product)->with('all_product', $all_product)
-		->with('meta_desc',$meta_desc)->with('meta_keywords',$meta_keywords)->with('meta_title',$meta_title)->with('url_canonical',$url_canonical)
-		->with('slider',$slider);
+	public function edit_order_status($order_id)
+	{
+		$this->Auth_Login();
+		$edit_order_status = DB::table('tbl_order')->where('tbl_order.order_id', $order_id)->get();
+		$manager_order_status = view('admin.order_details.edit_order_status')->with('edit_order_status', $edit_order_status);
+		return view('admin_layout')->with('admin.order_details.edit_order_status', $manager_order_status);
 	}
-
-	public function recover_pass(Request $request){
-		return Redirect::to('/quen-mat-khau');
+	public function update_order_status(Request $request, $order_id)
+	{
+		$data = array();
+		$data['order_status'] = $request->order_status;
+		DB::table('tbl_order')->where('order_id', $order_id)->update($data);
+		Toastr::success('Cập nhật trạng thái thành công', 'Successful!!');
+		return Redirect::to('manage-order');
 	}
 }

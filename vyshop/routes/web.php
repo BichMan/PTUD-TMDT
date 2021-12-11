@@ -8,6 +8,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\PostCategoryController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,13 +29,17 @@ Route::get('/trang-chu', [HomeController::class, 'index']);
 Route::post('/tim-kiem', [HomeController::class, 'search']);
 
 //Danh muc san pham trang chu
-Route::get('/danh-muc-san-pham/{category_id}', [CategoryProductController::class, 'Category_Home']);
+Route::get('/danh-muc-san-pham/{meta_keywords}', [CategoryProductController::class, 'Category_Home']);
+
+//Bai viet trang chu
+Route::get('/danh-muc-bai-viet/{cate_post_slug}', [PostCategoryController::class, 'danh_muc_bai_viet']);
+Route::get('/bai-viet/{post_slug}', [PostController::class, 'bai_viet']);
 
 //Thuong hieu san pham trang chu
-Route::get('/thuong-hieu-san-pham/{brand_id}', [BrandProductController::class, 'Brand_Home']);
+Route::get('/thuong-hieu-san-pham/{meta_keywords}', [BrandProductController::class, 'Brand_Home']);
 
 //Chi tiet san pham trang chu
-Route::get('/chi-tiet-san-pham/{product_id}', [ProductController::class, 'details_product']);
+Route::get('/chi-tiet-san-pham/{meta_keywords}', [ProductController::class, 'details_product']);
 
 //BackEnd - hoạt động ở server
 Route::get('/admin', [AdminController::class, 'index']);
@@ -52,6 +58,29 @@ Route::get('/active-category-product/{category_product_id}', [CategoryProductCon
 
 Route::post('/save-category-product', [CategoryProductController::class, 'save_category_product']);
 Route::post('/update-category-product/{category_product_id}', [CategoryProductController::class, 'update_category_product']);
+
+//Category Post
+Route::get('/add-category-post', [PostCategoryController::class, 'add_category_post']);
+Route::post('/save-category-post', [PostCategoryController::class, 'save_category_post']);
+Route::get('/all-category-post', [PostCategoryController::class, 'all_category_post']);
+Route::get('/delete-category-post/{cate_post_id}', [PostCategoryController::class, 'delete_category_post']);
+
+Route::get('/unactive-category-post/{cate_post_id}', [PostCategoryController::class, 'unactive_category_post']);
+Route::get('/active-category-post/{cate_post_id}', [PostCategoryController::class, 'active_category_post']);
+
+Route::get('/edit-category-post/{cate_post_id}', [PostCategoryController::class, 'edit_category_post']);
+Route::post('/update-category-post/{cate_post_id}', [PostCategoryController::class, 'update_category_post']);
+
+//Post
+Route::get('/add-post', [PostController::class, 'add_post']);
+Route::get('/all-post', [PostController::class, 'all_post']);
+Route::get('/delete-post/{post_id}', [PostController::class, 'delete_post']);
+Route::get('/unactive-post/{post_id}', [PostController::class, 'unactive_post']);
+Route::get('/active-post/{post_id}', [PostController::class, 'active_post']);
+Route::get('/edit-post/{post_id}', [PostController::class, 'edit_post']);
+
+Route::post('/update-post/{post_id}', [PostController::class, 'update_post']);
+Route::post('/save-post', [PostController::class, 'save_post']);
 
 //Brand Product
 Route::get('/add-brand-product', [BrandProductController::class, 'add_brand_product']);
@@ -103,7 +132,9 @@ Route::post('/recover-pass', [CheckoutController::class, 'recover_pass']);
 
 //Order
 Route::get('/manage-order', [CheckoutController::class, 'manage_order']);
-Route::get('/view-order/{orderid}', [CheckoutController::class, 'view_order']);
+Route::get('/view-order/{order_id}', [CheckoutController::class, 'view_order']);
+Route::get('/edit-order-status/{order_id}', [CheckoutController::class, 'edit_order_status']);
+Route::post('/update-order-status/{order_id}', [CheckoutController::class, 'update_order_status']);
 
 //send Mail
 Route::get('/send-mail', [HomeController::class, 'send_mail']);
@@ -124,6 +155,8 @@ Route::post('/insert-slider',[SliderController::class, 'insert_slider']);
 Route::get('/unactive-slider/{slider_id}',[SliderController::class, 'unactive_slider']);
 Route::get('/active-slider/{slider_id}',[SliderController::class, 'active_slider']);
 Route::get('/delete-slider/{slider_id}',[SliderController::class, 'delete_slider']);
+
+
 
 
 
