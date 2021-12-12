@@ -38,9 +38,9 @@ class CartController extends Controller
     }
     public function show_cart(Request $request)
     {
-        $category_post = DB::table('tbl_category_post')->where('cate_post_status','0')->get();
-        
-		$slider = SliderModels::orderBy('slider_id','DESC')->where('slider_status','0')->take(4)->get();
+        $category_post = DB::table('tbl_category_post')->where('cate_post_status', '0')->get();
+
+        $slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
 
         $cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
@@ -52,13 +52,13 @@ class CartController extends Controller
         $url_canonical = $request->url();
         return view('pages.cart.show_cart')->with('category', $cate_product)->with('brand', $brand_product)
             ->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)
-            ->with('url_canonical', $url_canonical)->with('slider',$slider)->with('category_post',$category_post);
+            ->with('url_canonical', $url_canonical)->with('slider', $slider)->with('category_post', $category_post);
     }
     public function delete_cart($rowId)
     {
         Cart::remove($rowId);
         Toastr::info('Xoá thành công!!');
-        return redirect(url()->previous().'#subscribe');
+        return redirect(url()->previous() . '#subscribe');
     }
 
     public function update_quantity_cart(Request $request)

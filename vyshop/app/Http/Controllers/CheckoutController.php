@@ -267,6 +267,9 @@ class CheckoutController extends Controller
 
 		return Redirect::to('/');
 	}
+
+///end home
+
 	public function manage_order()
 	{
 		$this->Auth_Login();
@@ -301,6 +304,7 @@ class CheckoutController extends Controller
 	}
 	public function update_order_status(Request $request, $order_id)
 	{
+		$this->Auth_Login();
 		$data = array();
 		$data['order_status'] = $request->order_status;
 		DB::table('tbl_order')->where('order_id', $order_id)->update($data);
