@@ -26,12 +26,16 @@
                         {{-- get dữ liệu --}}
                         @foreach ($all_post as $key => $post)
                             <tr>
-                                <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label>
+                                <td><label class="i-checks m-b-none"><input type="checkbox" name="post"><i></i></label>
                                 </td>
                                 <td style="width:300px">{{ $post->post_title }}</td>
                                 <td style="width:400px">{{ $post->post_desc }}</td>
                                 <td><img src="public/uploads/post/{{ $post->post_image }}" height="100" width="200"></td>
-                                <td>{{ $post->cate_post_id }}</td>
+                                <td>@foreach ($cate_post as $key => $cate)
+                                    @if($cate->cate_post_id == $post->cate_post_id)
+                                        {{ $cate->cate_post_name }}
+                                    @endif
+                                @endforeach</td>
                                 <td><span class="text-ellipsis">
                                         <?php
 								if($post->post_status ==0){
@@ -65,7 +69,7 @@
                 <div class="row">
                     <div class="col-sm-5 text-left">
                         <ul class="pagination pagination-sm m-t-none m-b-none">
-                            {!! $all_post->links() !!}
+                            {!! $all_post->links('paginate') !!}
                         </ul>
                     </div>
                 </div>

@@ -48,14 +48,14 @@ class BrandProductController extends Controller
         // $data = $request->all();
         $data = $request->validate([
 			'brand_name' => 'required|unique:tbl_brand',
-			'brand_desc' => 'required',
 			'brand_keywords' => 'required',
+            'brand_desc' => 'required',
 			'brand_status' => 'required',
 		], [
 			'brand_name.unique' => 'Tên thương hiệu sản phẩm đã tồn tại.',
 			'brand_name.required' => ' Thêm tên thương hiệu.',
-			'brand_desc.required' => ' Thêm mô tả thương hiệu.'
-			// 'post_slug.required' => 'Tên bài viết đã tồn tại'
+			'brand_desc.required' => ' Thêm mô tả thương hiệu.',
+			'brand_keywords.required' => ' Thêm slug thương hiệu.',
 		]);
         $brand = new BrandProductModels();
         $brand->brand_name = $data['brand_name'];
@@ -106,7 +106,16 @@ class BrandProductController extends Controller
     public function update_brand_product(Request $request, $brand_product_id)
     {
         $this->Auth_Login();
-        $data = $request->all();
+        $data = $request->validate([
+			'brand_name' => 'required',
+			'brand_desc' => 'required',
+			'brand_keywords' => 'required',
+		], [
+			// 'brand_name.unique' => 'Tên thương hiệu sản phẩm đã tồn tại.',
+			'brand_name.required' => ' Thêm tên thương hiệu.',
+			'brand_desc.required' => ' Thêm mô tả thương hiệu.',
+			'brand_keywords.required' => ' Thêm slug thương hiệu.'
+		]);
         $brand = BrandProductModels::find($brand_product_id);
         $brand->brand_name = $data['brand_name'];
         $brand->brand_desc = $data['brand_desc'];

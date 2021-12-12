@@ -41,14 +41,15 @@ class PostCategoryController extends Controller
 
         // $data = $request->all();
         $data = $request->validate([
+            'cate_post_name' => 'required',
 			'cate_post_slug' => 'required|unique:tbl_category_post',
-			'cate_post_name' => 'required',
 			'cate_post_desc' => 'required',
 			'cate_post_status' => 'required'
 		], [
 			'cate_post_slug.unique' => 'Tên danh mục bài viết đã tồn tại.',
-			'cate_post_slug.required' => ' Thêm tên danh mục.',
-			'cate_post_desc.required' => ' Thêm mô tả danh mục.'
+			'cate_post_name.required' => ' Thêm tên danh mục.',
+			'cate_post_desc.required' => ' Thêm mô tả danh mục.',
+			'cate_post_slug.required' => ' Thêm slug danh mục.',
 			// 'post_slug.required' => 'Tên bài viết đã tồn tại'
 		]);
         $category_post = new PostCategoryModels();
@@ -96,7 +97,18 @@ class PostCategoryController extends Controller
     public function update_category_post(Request $request, $cate_post_id)
     {
         $this->Auth_Login();
-        $data = $request->all();
+        $data = $request->validate([
+			'cate_post_slug' => 'required',
+			'cate_post_name' => 'required',
+			'cate_post_desc' => 'required',
+			// 'cate_post_status' => 'required'
+		], [
+			// 'cate_post_slug.unique' => 'Tên danh mục bài viết đã tồn tại.',
+			'cate_post_name.required' => ' Thêm tên danh mục.',
+			'cate_post_desc.required' => ' Thêm mô tả danh mục.',
+			'cate_post_slug.required' => ' Thêm slug danh mục.'
+			// 'post_slug.required' => 'Tên bài viết đã tồn tại'
+		]);
         $category_post = PostCategoryModels::find($cate_post_id);
         $category_post->cate_post_name = $data['cate_post_name'];
         $category_post->cate_post_desc = $data['cate_post_desc'];

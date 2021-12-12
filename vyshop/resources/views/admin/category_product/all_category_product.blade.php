@@ -59,7 +59,7 @@
                 <div class="row">
                     <div class="col-sm-5 text-left">
                         <ul class="pagination pagination-sm m-t-none m-b-none">
-                            {!! $all_category_product->links() !!}
+                            {!! $all_category_product->links('paginate') !!}
                         </ul>
                     </div>
                 </div>

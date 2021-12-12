@@ -70,9 +70,20 @@
                                 </td>
                             </tr>
                         @endforeach
+
+                    </tbody>
+                    <tbody>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="cart_price">
+                            <p>Thành tiền: {{ Cart::total(0, ',', '.') . ' ' . 'vnđ' }}</p>
+                        </td>
                     </tbody>
                 </table>
             </div>
+
             <h4 style="margin: 50px 0;font-size: 20px;">Chọn hình thức thanh toán</h4>
             <form action="{{ URL::to('/order-place') }}" method="POST">
                 {{ csrf_field() }}
@@ -80,14 +91,47 @@
                     <span>
                         <label><input type="radio" name="payment_option" value="2"> Thanh toán khi nhận hàng</label>
                     </span>
-                    <span>
-                        <label><input type="radio" name="payment_option" value="3"> Thanh toán bằng Paypal</label>
-                    </span>
                     <input type="submit" value="Đặt hàng" class="btn btn-primary btn-sm" name="send_oder_place"
                         style="margin-top:0">
+                    <?php
+                    $message_dathang = Session::get('message_dathang'); //get lấy message đã put
+                    if ($message_dathang) {
+                        echo '<a>', $message_dathang . '</a>';
+                        Session::put('message_dathang', null);
+                    }
+                    ?>
+                    <?php
+                    $message_giohang = Session::get('message_giohang'); //get lấy message đã put
+                    if ($message_giohang) {
+                        echo '<a>', $message_giohang . '</a>';
+                        Session::put('message_giohang', null);
+                    }
+                    ?>
+                    <span>
+                        @php
+                            $change = Cart::total(0, ',', '');
+                            $vnd_to_usd = $change / 23030;
+                        @endphp
+                        @if (Cart::content() == '[]')
+                            <?php
+                            $message_giohang = Session::get('message_giohang'); //get lấy message đã put
+                            if ($message_giohang) {
+                                echo '<a>', $message_giohang . '</a>';
+                                Session::put('message_giohang', null);
+                            }
+                            ?>
+                        @else
+                            <div id="paypal-button"></div>
+                            <input type="hidden" id="vnd_to_usd" value="{{ round($vnd_to_usd, 2) }}">
+                        @endif
+                    </span>
                 </div>
             </form>
-        </div>
+
+
+            {{-- @if (session()->has('route'))
+                <a href="{{ URL::to('/order-place') }}">Xác nhận đã thanh toán đơn hàng</a>
+            @endif --}}
         </div>
     </section>
     <!--/#cart_items-->

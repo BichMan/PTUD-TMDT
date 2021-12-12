@@ -120,6 +120,7 @@ Route::get('/login-checkout', [CheckoutController::class, 'login_checkout']);
 Route::get('/logout-checkout', [CheckoutController::class, 'logout_checkout']);
 Route::get('/checkout', [CheckoutController::class, 'checkout']);
 Route::get('/payment', [CheckoutController::class, 'payment']);
+Route::get('/paypal-payment', [CheckoutController::class, 'paypal_payment']);
 Route::post('/login-customer', [CheckoutController::class, 'login_customer']);
 Route::post('/add-customer', [CheckoutController::class, 'add_customer']);
 Route::post('/save-customer', [CheckoutController::class, 'save_customer']);

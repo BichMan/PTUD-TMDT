@@ -14,7 +14,7 @@
                                 method="post">
                                 {{ csrf_field() }}
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Tình trạng giao hàng</label>
+                                    <label for="exampleInputEmail1">Tình trạng đơn hàng</label>
                                     <select name="order_status" class="form-control input-sm m-bot15">
                                         <option value="0">Đang xử lý</option>
                                         <option value="1">Đã giao hàng</option>

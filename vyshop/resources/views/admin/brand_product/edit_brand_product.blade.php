@@ -7,6 +7,15 @@
                     Cập nhật danh mục sản phẩm
                 </header>
                 <div class="panel-body">
+                    @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        {{ $error }}
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     @foreach ($edit_brand_product as $key => $edit_value)
                         <div class="position-center">
                             <form role="form" action="{{ URL::to('/update-brand-product/' . $edit_value->brand_id) }}"

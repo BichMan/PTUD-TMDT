@@ -10,6 +10,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use App\Models\SliderModels;
 use App\Models\PostCategoryModels;
 use App\Models\ProductModels;
+use Illuminate\Validation\Rule;
 
 session_start();
 
@@ -48,8 +49,8 @@ class ProductController extends Controller
 	{
 		$this->Auth_Login();
 		$data = $request->validate([
-			'product_keywords' => 'required',
 			'product_name' => 'required|unique:tbl_product',
+			'product_keywords' => 'required',
 			'product_price' => 'required',
 			'product_desc' => 'required',
 			'product_cate' => 'required',
@@ -57,10 +58,11 @@ class ProductController extends Controller
 			'product_status' => 'required',
 			'product_image' => 'required',
 		], [
-			'product_name.unique' => 'Tên sản phẩm đã tồn tại.',
-			'product_name.reqired' => ' Thêm tên sản phẩm.',
+			// 'product_name.unique' => 'Tên sản phẩm đã tồn tại.',
+			'product_name.required' => ' Thêm tên sản phẩm.',
 			'product_price.required' => ' Thêm giá sản phẩm.',
 			'product_desc.required' => ' Thêm mô tả sản phẩm.',
+			'product_keywords.required' => ' Thêm slug sản phẩm.',
 			'product_image.required' => ' Thêm hình ảnh sản phẩm.',
 		]);
 		$product = new ProductModels();
@@ -137,14 +139,29 @@ class ProductController extends Controller
 	public function update_product(Request $request, $product_id)
 	{
 		$this->Auth_Login();
-		$data = array();
-		$data['product_name'] = $request->product_name; //name tên cột
-		$data['product_price'] = $request->product_price;
-		$data['product_desc'] = $request->product_desc;
-		$data['category_id'] = $request->product_cate;
-		$data['brand_id'] = $request->product_brand;
-		$data['meta_keywords'] = $request->product_keywords;
-		// $data['product_status'] = $request->product_status;
+		$data = $request->validate([
+			'product_keywords' => 'required',
+			'product_name' => 'required',
+			'product_price' => 'required',
+			'product_desc' => 'required',
+			'product_cate' => 'required',
+			'product_brand' => 'required',
+			'product_image' => 'required',
+		], [
+			'product_name.required' => ' Thêm tên sản phẩm.',
+			'product_keywords.required' => ' Thêm slug sản phẩm.',
+			'product_price.required' => ' Thêm giá sản phẩm.',
+			'product_desc.required' => ' Thêm mô tả sản phẩm.',
+			'product_image.required' => ' Thêm hình ảnh sản phẩm.',
+		]);
+        $product = ProductModels::find($product_id);
+
+		$product->product_name = $data['product_name'];
+		$product->product_price = $data['product_price'];
+		$product->product_desc = $data['product_desc'];
+		$product->category_id = $data['product_cate'];
+		$product->brand_id = $data['product_brand'];
+		$product->meta_keywords = $data['product_keywords'];
 		$get_image = $request->file('product_image');
 
 		if ($get_image) {
@@ -153,18 +170,18 @@ class ProductController extends Controller
 			$new_image = $name_image . rand(0, 99) . '.' . $get_image->getClientOriginalExtension(); //đuôi . mở rộng của ảnh
 			//rand tránh trùng ảnh khi upload
 			$get_image->move('public/uploads/product', $new_image); //di chuyển upload
+
 			$data['product_image'] = $new_image;
-
-			DB::table('tbl_product')->where('product_id', $product_id)->update($data);
-			// Session::put('message', 'Cập nhật sản phẩm thành công');
+			$product->product_image = $data['product_image'];
+			$product->save();
+			// Session::put('message', 'Thêm sản phẩm thành công');
 			Toastr::success('Cập nhật sản phẩm thành công', 'Successful!!');
-			return Redirect::to('all-product'); //Trở về trang all-product
+			return Redirect::to('add-product'); //Trở về trang all-product
 		}
-		DB::table('tbl_product')->where('product_id', $product_id)->update($data);
-		// Session::put('message', 'Cập nhật sản phẩm thành công');
-		Toastr::success('Cập nhật sản phẩm thành công', 'Successful!!');
-		return Redirect::to('all-product'); //Trở về trang all-product
-
+		else{
+			Toastr::warning('Vui lòng thêm ảnh', 'Cảnh báo!!');
+			return Redirect::to('add-product'); //Trở về trang add-product
+		}
 	}
 	//End admin pages
 	//Details product home
@@ -192,7 +209,7 @@ class ProductController extends Controller
 		$details_product = ProductModels::with('category_product')->with('brand_product')->where('product_status', 0)->where('product_id', $id)->where('brand_id', $brand_id)->where('category_id', $category_id)->get();
 
 		//san pham lien quan
-		$related_product = ProductModels::with('category_product')->with('brand_product')->where('product_status', 0)->where('category_id', $category_id)->whereNotIn('product_id', [$id])->get();
+		$related_product = ProductModels::with('category_product')->with('brand_product')->where('product_status', 0)->where('category_id', $category_id)->whereNotIn('product_id', [$id])->limit(3)->get();
 		return view('pages.product.details_product')->with('category', $cate_product)->with('brand', $brand_product)->with('product_details', $details_product)->with('relate', $related_product)
 			->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
 			->with('slider', $slider)->with('category_post', $category_post);

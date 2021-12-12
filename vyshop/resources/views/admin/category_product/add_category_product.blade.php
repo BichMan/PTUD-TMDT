@@ -22,17 +22,17 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Tên danh mục</label>
                                 <input type="text" name="category_product_name" class="form-control"
-                                    onkeyup="ChangeToSlug();" id="slug" placeholder="Enter email" required>
+                                    onkeyup="ChangeToSlug();" id="slug" placeholder="Enter email" >
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Slug</label>
                                 <input type="text" class="form-control" name="category_product_keywords" id="convert_slug"
-                                    placeholder="Mô tả danh mục" required>
+                                    placeholder="Mô tả danh mục" >
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Mô tả danh mục</label>
                                 <textarea style="resize: none" rows="5" class="form-control" name="category_product_desc"
-                                    placeholder="Mô tả danh mục" required></textarea>
+                                    placeholder="Mô tả danh mục" ></textarea>
                             </div>
 
                             <div class="form-group">

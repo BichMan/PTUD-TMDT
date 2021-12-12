@@ -34,28 +34,32 @@ class PostController extends Controller
 	{
 		$this->Auth_Login();
 		$all_post = PostModels::with('cate_post')->orderBy('post_id')->paginate(4);
-		return view('admin.post.all_post')->with(compact('all_post'));
+		$cate_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->get();
+
+		return view('admin.post.all_post')->with(compact('all_post', 'cate_post'));
 	}
 
 	public function save_post(Request $request)
 	{
 		$this->Auth_Login();
 		$data = $request->validate([
-			'post_slug' => 'required|unique:tbl_posts',
 			'post_title' => 'required',
+			'post_slug' => 'required|unique:tbl_posts',
+			'post_image' => 'required',
 			'post_desc' => 'required',
 			'post_content' => 'required',
 			'post_meta_desc' => 'required',
 			'post_meta_keywords' => 'required',
 			'cate_post_id' => 'required',
-			'post_image' => 'required',
+			'post_status' => 'required',
 		], [
 			'post_slug.unique' => 'Tên bài viết đã tồn tại.',
-			'post_slug.required' => ' Thêm tên bài viết.',
+			'post_slug.required' => 'Thêm slug bài viết.',
+			'post_title.required' => ' Thêm tên bài viết.',
 			'post_desc.required' => ' Thêm mô tả bài viết.',
 			'post_content.required' => ' Thêm nội dung bài viết.',
-			'post_meta_desc.required' => ' Thêm meta desc bài viết.',
-			'post_meta_keywords.required' => ' Thêm meta keyword bài viết.',
+			'post_meta_desc.required' => ' Thêm meta nội dung bài viết.',
+			'post_meta_keywords.required' => ' Thêm meta từ khóa bài viết.',
 			'post_image.required' => ' Thêm hình ảnh bài viết.',
 			// 'post_slug.required' => 'Tên bài viết đã tồn tại'
 		]);
@@ -125,15 +129,34 @@ class PostController extends Controller
 	{
 		$this->Auth_Login();
 
-		$edit_post = PostModels::find($post_id)->get();
+		$post = PostModels::where('post_id', $post_id)->get();
 		$cate_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->get();
 
-		return view('admin.post.edit_post')->with(compact('edit_post', 'cate_post'));
+		return view('admin.post.edit_post')->with(compact('post', 'cate_post'));
 	}
 	public function update_post(Request $request, $post_id)
 	{
 		$this->Auth_Login();
-        $data = $request->all();
+		$data = $request->validate([
+			'post_slug' => 'required',
+			'post_title' => 'required',
+			'post_desc' => 'required',
+			'post_content' => 'required',
+			'post_meta_desc' => 'required',
+			'post_meta_keywords' => 'required',
+			'cate_post_id' => 'required',
+			'post_image' => 'required',
+		], [
+			// 'post_slug.unique' => 'Tên bài viết đã tồn tại.',
+			'post_title.required' => ' Thêm tên bài viết.',
+			'post_slug.required' => ' Thêm slug bài viết.',
+			'post_desc.required' => ' Thêm mô tả bài viết.',
+			'post_content.required' => ' Thêm nội dung bài viết.',
+			'post_meta_desc.required' => ' Thêm meta desc bài viết.',
+			'post_meta_keywords.required' => ' Thêm meta keyword bài viết.',
+			'post_image.required' => ' Thêm hình ảnh bài viết.',
+			// 'post_slug.required' => 'Tên bài viết đã tồn tại'
+		]);
 		$post = PostModels::find($post_id);
 		$post->post_title = $data['post_title'];
 		$post->post_desc = $data['post_desc'];

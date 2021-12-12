@@ -159,10 +159,71 @@ class CheckoutController extends Controller
 
 	public function order_place(Request $request)
 	{
-		//insert phương thức thanh toán
+		if ($request->payment_option != null && Cart::content() != '[]') {
+			// insert phương thức thanh toán
+			$data = array();
+			$data['payment_method'] = 'Thanh toán khi nhận hàng';
+			$data['payment_status'] = 'Thanh toán khi nhận hàng';
+			$payment_id = DB::table('tbl_payment')->insertGetId($data);
+
+			//insetr order
+			$data_order = array();
+			$data_order['customer_id'] = Session::get('customer_id');
+			$data_order['shipping_id'] = Session::get('shipping_id');
+			$data_order['payment_id'] = $payment_id;
+			$data_order['order_total'] = Cart::total();
+			$data_order['order_status'] = 0;
+			$order_id = DB::table('tbl_order')->insertGetId($data_order);
+
+			//insetr details order
+			$content = Cart::content();
+			foreach ($content as $v_content) {
+				$data_details_order = array();
+				$data_details_order['order_id'] = $order_id;
+				$data_details_order['product_id'] = $v_content->id;
+				$data_details_order['product_name'] = $v_content->name;
+				$data_details_order['product_price'] = $v_content->price;
+				$data_details_order['product_sales_quatity'] = $v_content->qty;
+				DB::table('tbl_order_details')->insertGetId($data_details_order);
+			}
+
+			if ($data['payment_method'] == 'Thanh toán khi nhận hàng') {
+				Cart::destroy();
+				$category_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->where('cate_post_status', '0')->get();
+
+				$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
+
+				$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
+
+				$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
+
+				$meta_desc = "Đặt hàng thành công";
+				$meta_keywords = "Đặt hàng Thành Công";
+				$meta_title = "Đặt hàng Thành Công";
+				$url_canonical = $request->url();
+				Toastr::success('Bạn đã đặt hàng thành công. Cảm ơn bạn', 'Chúc mừng!!');
+				return Redirect::to('/');
+
+				// return view('pages.Checkout_Account.handcash')->with('category', $cate_product)->with('brand', $brand_product)
+				// 	->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
+				// 	->with('slider', $slider)->with('category_post', $category_post);
+			}
+		} elseif (Cart::content() == '[]') {
+			Session::put('message_dathang', 'Vui lòng thêm sản phẩm vào giỏ hàng');
+			// Toastr::warning('Mật khẩu hoặc tài khoản sai. Vui lòng nhập lại');
+			return redirect()->back();
+		} else {
+			Session::put('message_dathang', 'Vui lòng chọn hình thức thanh toán');
+			// Toastr::warning('Mật khẩu hoặc tài khoản sai. Vui lòng nhập lại');
+			return redirect()->back();
+		}
+	}
+
+	public function paypal_payment(Request $request)
+	{
 		$data = array();
-		$data['payment_method'] = $request->payment_option;
-		$data['payment_status'] = 'Đang chờ xử lý';
+		$data['payment_method'] = 'PayPal';
+		$data['payment_status'] = 'Đã thanh toán';
 		$payment_id = DB::table('tbl_payment')->insertGetId($data);
 
 		//insetr order
@@ -186,41 +247,33 @@ class CheckoutController extends Controller
 			DB::table('tbl_order_details')->insertGetId($data_details_order);
 		}
 
-		if ($data['payment_method'] == 2) {
-			Cart::destroy();
-			$category_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->where('cate_post_status', '0')->get();
+		Cart::destroy();
+		$category_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->where('cate_post_status', '0')->get();
 
-			$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
+		$slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status', '0')->take(4)->get();
 
-			$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
+		$cate_product = DB::table('tbl_category_product')->where('category_status', '0')->orderby('category_id', 'desc')->get();
 
-			$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
+		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
 
-			$meta_desc = "Thanh toán thành công";
-			$meta_keywords = "Thanh toán Thành Công";
-			$meta_title = "Thanh toán Thành Công";
-			$url_canonical = $request->url();
+		$meta_desc = "Thanh toán thành công";
+		$meta_keywords = "Thanh toán Thành Công";
+		$meta_title = "Thanh toán Thành Công";
+		$url_canonical = $request->url();
 
-			return view('pages.Checkout_Account.handcash')->with('category', $cate_product)->with('brand', $brand_product)
-				->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
-				->with('slider', $slider)->with('category_post', $category_post);
-		} else {
-			$meta_desc = "Thanh toán thành công";
-			$meta_keywords = "Thanh toán Thành Công";
-			$meta_title = "Thanh toán Thành Công";
-			$url_canonical = $request->url();
-			echo "Thanh toán bằng momo";
-		}
-		// return Redirect::to('/payment');
+		// return view('pages.Checkout_Account.handcash')->with('category', $cate_product)->with('brand', $brand_product)
+		// 	->with('meta_desc', $meta_desc)->with('meta_keywords', $meta_keywords)->with('meta_title', $meta_title)->with('url_canonical', $url_canonical)
+		// 	->with('slider', $slider)->with('category_post', $category_post);
+
+		return Redirect::to('/');
 	}
-
 	public function manage_order()
 	{
 		$this->Auth_Login();
 		$all_order = DB::table('tbl_order')
 			->join('tbl_customer', 'tbl_order.customer_id', '=', 'tbl_customer.customer_id')
 			->select('tbl_order.*', 'tbl_customer.customer_name')
-			->orderby('tbl_order.order_id', 'desc')->get();
+			->orderby('tbl_order.order_id', 'desc')->paginate(5);
 		$manager_order = view('admin.order_details.manage_order')->with('all_order', $all_order);
 		return view('admin_layout')->with('admin.order_details.manage_order', $manager_order);
 	}
@@ -232,7 +285,8 @@ class CheckoutController extends Controller
 			->join('tbl_customer', 'tbl_order.customer_id', '=', 'tbl_customer.customer_id')
 			->join('tbl_shipping', 'tbl_order.shipping_id', '=', 'tbl_shipping.shipping_id')
 			->join('tbl_order_details', 'tbl_order.order_id', '=', 'tbl_order_details.order_id')
-			->select('tbl_order.*', 'tbl_customer.*', 'tbl_shipping.*', 'tbl_order_details.*')->first();
+			->join('tbl_payment', 'tbl_payment.payment_id', '=', 'tbl_order.payment_id')
+			->select('tbl_order.*', 'tbl_customer.*', 'tbl_shipping.*', 'tbl_order_details.*', 'tbl_payment.*')->first();
 		$order_pro = DB::table('tbl_order_details')->where('tbl_order_details.order_id', $order_id)->get();
 		$manager_order_by_id = view('admin.order_details.view_order')->with('order_by_id', $order_by_id)->with('order_pro', $order_pro);
 		return view('admin_layout')->with('admin.order_details.view_order', $manager_order_by_id);

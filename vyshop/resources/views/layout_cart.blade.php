@@ -291,6 +291,50 @@
     {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
     <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
+
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script>
+        var usd = document.getElementById("vnd_to_usd").value;
+        paypal.Button.render({
+            // Configure environment
+            env: 'sandbox',
+            client: {
+                sandbox: 'AQlKLDSyZy7eJe0iX2BJ7EYYmr-ns-_B0kgy5m4d110bDvI_J4RWN0Eb59NpE013GCoPrbd38jI2beRk',
+                production: 'demo_production_client_id'
+            },
+            // Customize button (optional)
+            locale: 'en_US',
+            style: {
+                size: 'small',
+                color: 'gold',
+                shape: 'pill',
+            },
+
+            // Enable Pay Now checkout flow (optional)
+            commit: true,
+
+            // Set up a payment
+            payment: function(data, actions) {
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: `${usd}`,
+                            // nối chuỗi hoặc nối biến
+                            currency: 'USD'
+                        }
+                    }]
+                });
+            },
+            // Execute the payment
+            onAuthorize: function(data, actions) {
+                return actions.payment.execute().then(function() {
+                        window.alert('Cảm ơn, bạn đã đặt hàng thành công!');
+                        window.location.href = "{{ URL::to('/paypal-payment')}}";
+
+                });
+            }
+        }, '#paypal-button');
+    </script>
     {{-- <script>
         $(document).ready(function(){
             $('.add-to-cart').click(function(){

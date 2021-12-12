@@ -8,6 +8,15 @@
                 </header>
                 <div class="panel-body">
                     <div class="position-center">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        {{ $error }}
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         @foreach ($edit_product as $key => $product)
                             <form role="form" action="{{ URL::to('/update-product/' . $product->product_id) }}" method="post"
                                 enctype="multipart/form-data">
@@ -15,17 +24,17 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tên sản phẩm</label>
                                     <input type="text" name="product_name" class="form-control" onkeyup="ChangeToSlug();"
-                                        id="slug" value="{{ $product->product_name }}" required>
+                                        id="slug" value="{{ $product->product_name }}" >
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Slug</label>
                                     <input type="text" style="resize: none" class="form-control" id="convert_slug"
-                                        name="product_keywords" value="{{ $product->meta_keywords }}" required>
+                                        name="product_keywords" value="{{ $product->meta_keywords }}" >
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Giá sản phẩm</label>
                                     <input type="text" name="product_price" class="form-control" id="exampleInputEmail1"
-                                        value="{{ $product->product_price }}" required>
+                                        value="{{ $product->product_price }}" >
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Hình ảnh sản phẩm</label>

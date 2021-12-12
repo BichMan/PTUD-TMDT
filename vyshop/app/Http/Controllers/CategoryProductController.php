@@ -46,14 +46,14 @@ class CategoryProductController extends Controller
         // $data = $request->all();
         $data = $request->validate([
 			'category_product_name' => 'required|unique:tbl_category_product,category_name',
-			'category_product_desc' => 'required',
 			'category_product_keywords' => 'required',
+            'category_product_desc' => 'required',
 			'category_product_status' => 'required',
 		], [
 			'category_product_name.unique' => 'Tên danh mục sản phẩm đã tồn tại.',
 			'category_product_name.required' => ' Thêm tên danh mục.',
-			'category_product_desc.required' => ' Thêm mô tả danh mục.'
-			// 'post_slug.required' => 'Tên bài viết đã tồn tại'
+			'category_product_desc.required' => ' Thêm mô tả danh mục.',
+			'category_product_keywords.required' => ' Thêm slug danh mục.'
 		]);
         $category = new CategoryProductModels();
         $category->category_name = $data['category_product_name'];
@@ -104,7 +104,16 @@ class CategoryProductController extends Controller
     public function update_category_product(Request $request, $category_product_id)
     {
         $this->Auth_Login();
-        $data = $request->all();
+        $data = $request->validate([
+			'category_product_name' => 'required',
+			'category_product_desc' => 'required',
+			'category_product_keywords' => 'required',
+		], [
+			// 'category_product_name.unique' => 'Tên danh mục sản phẩm đã tồn tại.',
+			'category_product_name.required' => ' Thêm tên danh mục.',
+			'category_product_desc.required' => ' Thêm mô tả danh mục.',
+			'category_product_keywords.required' => ' Thêm slug danh mục.'
+		]);
         $category = CategoryProductModels::find($category_product_id);
         $category->category_name = $data['category_product_name'];
         $category->category_desc = $data['category_product_desc'];

@@ -10,7 +10,8 @@
                             <div class="productinfo text-center">
                                 <form action="{{ URL::to('/save-cart') }}" method="post">
                                     {{ csrf_field() }}
-                                    <img src="{{ URL::to('public/uploads/product/' . $product->product_image) }}" alt="" />
+                                    <img src="{{ URL::to('public/uploads/product/' . $product->product_image) }}"
+                                        alt="" />
                                     <input name="productid_hidden" type="hidden" value="{{ $product->product_id }}" />
                                     <input name="qty" type="hidden" value="1" />
                                     <h2>{{ number_format($product->product_price) . ' ' . 'vnđ' }}</h2>
@@ -25,5 +26,11 @@
                 </div>
             </a>
         @endforeach
-    </div>
+        <div class="row">
+            <div class="col-sm-5 text-left">
+                <ul class="pagination pagination-sm m-t-none m-b-none">
+                    {!! $all_product->links('paginate') !!}
+                </ul>
+            </div>
+        </div>
 @endsection

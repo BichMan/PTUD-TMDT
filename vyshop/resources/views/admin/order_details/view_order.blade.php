@@ -18,6 +18,7 @@
                             <th>Giá</th>
                             <th>Tổng tiền</th>
                             <th>Tình trạng</th>
+                            <th>Thanh toán</th>
                             <th style="width:30px"></th>
                         </tr>
                     </thead>
@@ -53,6 +54,7 @@
                                 <p>Đơn hàng đã hủy</p>
                                 @endif
                             </td>
+                            <td>{{ $order_by_id->payment_status }}</td>
                             <td>
                                 <a href="{{ URL::to('/edit-order-status/' . $order_by_id->order_id) }}"
                                     class="active styling-edit" ui-toggle-class="">
