@@ -47,11 +47,15 @@
                             <td>{{ $order_by_id->order_total }}</td>
                             <td>
                                 @if ($order_by_id->order_status == 0)
-                                <p>Đang xử lý</p>
+                                    <p>Chờ xử lý</p>
                                 @elseif ($order_by_id->order_status == 1)
-                                <p>Đã giao hàng</p>
+                                    <p>Đang đóng gói</p>
+                                @elseif ($order_by_id->order_status == 2)
+                                    <p>Đã chuyển giao đến đơn vị vẫn chuyển</p>
+                                @elseif ($order_by_id->order_status == 3)
+                                    <p>Đã giao hàng thành công</p>
                                 @else
-                                <p>Đơn hàng đã hủy</p>
+                                    <p>Đơn hàng đã hủy</p>
                                 @endif
                             </td>
                             <td>{{ $order_by_id->payment_status }}</td>
@@ -59,6 +63,9 @@
                                 <a href="{{ URL::to('/edit-order-status/' . $order_by_id->order_id) }}"
                                     class="active styling-edit" ui-toggle-class="">
                                     <i class="fa fa-pencil-square-o text-success text-active"></i></a>
+                                <a href="" class="active styling-edit">
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                </a>
                             </td>
                         </tr>
                     </tbody>

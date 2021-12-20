@@ -17,6 +17,7 @@
                             <th>Tên người đặt hàng</th>
                             <th>Tổng tiền</th>
                             <th>Tình trạng đơn hàng</th>
+                            {{-- <th>Thời gian đặt hàng</th> --}}
                             <th></th>
                         </tr>
                     </thead>
@@ -26,21 +27,29 @@
 
                             <tr>
                                 <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"></label></td>
-                                <td>{{ $order->customer_name }}</td>
+                                <td>{{ $order->shipping_name }}</td>
                                 <td>{{ $order->order_total }}</td>
                                 <td>
                                     @if ($order->order_status == 0)
-                                    <p>Đang xử lý</p>
+                                        <p>Chờ xử lý</p>
                                     @elseif ($order->order_status == 1)
-                                    <p>Đã giao hàng</p>
+                                        <p>Đang đóng gói</p>
+                                    @elseif ($order->order_status == 2)
+                                        <p>Đã chuyển giao đến đơn vị vẫn chuyển</p>
+                                    @elseif ($order->order_status == 3)
+                                        <p>Đã giao hàng thành công</p>
                                     @else
-                                    <p>Đơn hàng đã hủy</p>
+                                        <p>Đơn hàng đã hủy</p>
                                     @endif
                                 </td>
+                                {{-- <td>
+                                    <div id="current-time"></div>
+                                </td> --}}
                                 <td>
                                     <a href="{{ URL::to('/view-order/' . $order->order_id) }}" class="active styling-edit">
-										<i class="fa fa-eye" aria-hidden="true"></i>
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
                                     </a>
+
                                 </td>
                             </tr>
 
@@ -59,4 +68,20 @@
             </footer>
         </div>
     </div>
+    {{-- <script>
+        var curDate = new Date();
+
+        // Ngày hiện tại
+        var curDay = curDate.getDate();
+
+        // Tháng hiện tại
+        var curMonth = curDate.getMonth() + 1;
+
+        // Năm hiện tại
+        var curYear = curDate.getFullYear();
+
+       // var time = curDate.getHours() + ":" + curDate.getMinutes() + ":" + curDate.getSeconds();
+        // Gán vào thẻ HTML
+        document.getElementById('current-time').innerHTML = curDay + "/" + curMonth + "/" + curYear;
+    </script> --}}
 @endsection

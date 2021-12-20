@@ -275,7 +275,8 @@ class CheckoutController extends Controller
 		$this->Auth_Login();
 		$all_order = DB::table('tbl_order')
 			->join('tbl_customer', 'tbl_order.customer_id', '=', 'tbl_customer.customer_id')
-			->select('tbl_order.*', 'tbl_customer.customer_name')
+			->join('tbl_shipping', 'tbl_order.shipping_id', '=', 'tbl_shipping.shipping_id')
+			->select('tbl_order.*', 'tbl_customer.customer_name', 'tbl_shipping.*')
 			->orderby('tbl_order.order_id', 'desc')->paginate(5);
 		$manager_order = view('admin.order_details.manage_order')->with('all_order', $all_order);
 		return view('admin_layout')->with('admin.order_details.manage_order', $manager_order);

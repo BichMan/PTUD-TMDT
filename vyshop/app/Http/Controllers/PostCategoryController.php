@@ -66,7 +66,7 @@ class PostCategoryController extends Controller
     {
         $this->Auth_Login();
         DB::table('tbl_category_post')->where('cate_post_id', $cate_post_id)->delete();
-        Toastr::success('Thêm danh mục bài viết thành công', 'Successful!!');
+        Toastr::success('Xóa danh mục bài viết thành công', 'Successful!!');
         return redirect()->back();
     }
 

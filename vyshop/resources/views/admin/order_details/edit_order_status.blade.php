@@ -16,9 +16,11 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tình trạng đơn hàng</label>
                                     <select name="order_status" class="form-control input-sm m-bot15">
-                                        <option value="0">Đang xử lý</option>
-                                        <option value="1">Đã giao hàng</option>
-                                        <option value="2">Hủy đơn hàng</option>
+                                        <option value="0">Chờ xử lý</option>
+                                        <option value="1">Đang đóng gói</option>
+                                        <option value="2">Đã chuyển giao đến đơn vị vẫn chuyển</option>
+                                        <option value="3">Đã giao hàng thành công</option>
+                                        <option value="4">Hủy đơn hàng</option>
                                     </select>
                                 </div>
                                 <button type="submit" name="update_order_status" class="btn btn-info">Cập nhật</button>

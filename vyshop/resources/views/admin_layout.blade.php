@@ -52,7 +52,7 @@
         <header class="header clearfix">
             <!--logo start-->
             <div class="brand">
-                <a href="index.html" class="logo">
+                <a href="{{ URL::to('/dashboard') }}" class="logo">
                     ADMIN
                 </a>
                 <div class="sidebar-toggle-box">
@@ -101,7 +101,7 @@
                     <ul class="sidebar-menu" id="nav-accordion">
                         <li class="sub-menu">
                             <a href="javascript:;">
-                                <i class="fa fa-book"></i>
+                                <i class="fa fa-product-hunt"></i>
                                 <span>Sản phẩm</span>
                             </a>
                             <ul class="sub">
@@ -111,7 +111,7 @@
                         </li>
                         <li class="sub-menu">
                             <a href="javascript:;">
-                                <i class="fa fa-book"></i>
+                                <i class="fa fa-list-ul"></i>
                                 <span>Danh mục sản phẩm</span>
                             </a>
                             <ul class="sub">
@@ -122,7 +122,7 @@
                         </li>
                         <li class="sub-menu">
                             <a href="javascript:;">
-                                <i class="fa fa-book"></i>
+                                <i class="fa fa-tasks"></i>
                                 <span>Thương hiệu sản phẩm</span>
                             </a>
                             <ul class="sub">
@@ -133,7 +133,7 @@
                         </li>
                         <li class="sub-menu">
                             <a href="javascript:;">
-                                <i class="fa fa-book"></i>
+                                <i class="fa fa-picture-o"></i>
                                 <span>Slider Banner</span>
                             </a>
                             <ul class="sub">
@@ -143,7 +143,7 @@
                         </li>
                         <li class="sub-menu">
                             <a href="javascript:;">
-                                <i class="fa fa-book"></i>
+                                <i class="fa fa-list-ul"></i>
                                 <span>Danh mục Bài viết - Tin tức</span>
                             </a>
                             <ul class="sub">
@@ -163,7 +163,7 @@
                         </li>
                         <li class="sub-menu">
                             <a href="javascript:;">
-                                <i class="fa fa-book"></i>
+                                <i class="fa fa-cart-arrow-down"></i>
                                 <span>Đơn hàng</span>
                             </a>
                             <ul class="sub">
