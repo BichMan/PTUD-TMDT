@@ -62,9 +62,7 @@
                             <td>
                                 <a href="{{ URL::to('/edit-order-status/' . $order_by_id->order_id) }}"
                                     class="active styling-edit" ui-toggle-class="">
-                                    <i class="fa fa-pencil-square-o text-success text-active"></i></a>
-                                <a href="" class="active styling-edit">
-                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                    <i class="fa fa-pencil-square-o text-success text-active"></i>
                                 </a>
                             </td>
                         </tr>

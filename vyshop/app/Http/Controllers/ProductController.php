@@ -88,6 +88,10 @@ class ProductController extends Controller
 			$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
 			return view('admin_layout')->with('admin.product.all_product', $manager_product);
 		}
+		else {
+			Toastr::warning('Hãy chọn thông tin cần lọc!!');
+			return redirect()->back();
+		}
 	}
 	public function search_admin_product(Request $request)
 	{
@@ -101,7 +105,7 @@ class ProductController extends Controller
 			$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
 			return view('admin_layout')->with('admin.product.all_product', $manager_product);
 		} else {
-			Toastr::info('Hãy nhập từ khóa tìm kiếm!!');
+			Toastr::warning('Hãy nhập từ khóa tìm kiếm!!');
 			return redirect()->back();
 		}
 	}
