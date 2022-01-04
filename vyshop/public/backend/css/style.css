@@ -2051,9 +2051,9 @@ p.hd-title {
 }
 
 .btn-default {
-    color: #58666e !important;
+    color: #eff3f7 !important;
     background-color: #fcfdfd;
-    background-color: #fff;
+    background-color: rgb(9, 90, 167);
     border-color: #dee5e7;
     border-bottom-color: #d8e1e3;
     -webkit-box-shadow: 0 1px 1px rgba(90, 90, 90, 0.1);
@@ -3894,3 +3894,4 @@ span.fa-thumbs-styling.fa.fa-thumbs-up {
 i.fa.fa-pencil-square-o.text-success.text-active {
     font-size: 20px;
 }
+

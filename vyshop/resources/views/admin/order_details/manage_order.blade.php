@@ -17,6 +17,7 @@
                             <th>Tên người đặt hàng</th>
                             <th>Tổng tiền</th>
                             <th>Tình trạng đơn hàng</th>
+                            <th>Thay đổi trạng thái đơn hàng</th>
                             {{-- <th>Thời gian đặt hàng</th> --}}
                             <th></th>
                         </tr>
@@ -42,11 +43,28 @@
                                         <p>Đơn hàng đã hủy</p>
                                     @endif
                                 </td>
-                                {{-- <td>
-                                    <div id="current-time"></div>
-                                </td> --}}
                                 <td>
-                                    <a href="{{ URL::to('/view-order/' . $order->order_id) }}" class="active styling-edit">
+                                    <form role="form" action="{{ URL::to('/update-order-status/' . $order->order_id) }}"
+                                        method="post">
+                                        {{ csrf_field() }}
+                                        <div class="form-group">
+                                            <select name="order_status" style="width:200px; float:left"
+                                                class="form-control input-sm m-bot15">
+                                                <option selected disabled></option>
+                                                <option value="0">Chờ xử lý</option>
+                                                <option value="1">Đang đóng gói</option>
+                                                <option value="2">Đã chuyển giao đến đơn vị vẫn chuyển</option>
+                                                <option value="3">Đã giao hàng thành công</option>
+                                                <option value="4">Hủy đơn hàng</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" name="update_order_status" class="btn btn-info"
+                                            style="float: right">Cập nhật</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="{{ URL::to('/view-order/' . $order->order_id) }}"
+                                        class="active styling-edit">
                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                     </a>
 

@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use App\Rules\CaptchaRule;
 use Validator;
-use Socialite;
+use Laravel\Socialite\Facades\Socialite;
 use Brian2694\Toastr\Facades\Toastr;
-
+use App\Models\StatisticModels;
 
 session_start();
 
@@ -128,7 +128,7 @@ class AdminController extends Controller
 	}
 	public function callback_google()
 	{
-		$users = Socialite::driver('google')->stateless()->user();
+		$users = Socialite::driver('google')->user();
 		// return $users->id;
 		$authUser = $this->findOrCreateUser($users, 'google'); //lấy $user các trường từ google lấy về id, name và email, google là provider
 		if ($authUser) {
@@ -174,5 +174,24 @@ class AdminController extends Controller
 			$customer_new->save();
 			return $customer_new;
 		}
+	}
+	public function filter_by_date(Request $request)
+	{
+		$data = $request->all();
+		$from_date = $data['from_date'];
+		$to_date = $data['to_date'];
+		$get = StatisticModels::whereBetween('order_date',[$from_date, $to_date])->orderBy('order_date','ASC')->get();
+
+		foreach ($get as $key =>$val){
+			$chart_data[] = array(
+				'period' => $val->order_date,
+				'order' => $val->total_order,
+				'sales' => $val->sales,
+				'profit' => $val->profit,
+				'quantity' => $val->quantity
+
+			);
+		}
+		echo $data = json_encode($chart_data);
 	}
 }

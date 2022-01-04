@@ -46,6 +46,7 @@ Route::get('/admin', [AdminController::class, 'index']);
 Route::get('/dashboard', [AdminController::class, 'show_dashboard']);
 Route::get('/logout', [AdminController::class, 'logout']);
 Route::post('/admin-dashboard', [AdminController::class, 'dashboard']);
+Route::post('/filter-by-date', [AdminController::class, 'filter_by_date']);
 
 //Category Product
 Route::get('/add-category-product', [CategoryProductController::class, 'add_category_product']);
@@ -105,6 +106,10 @@ Route::get('/active-product/{product_id}', [ProductController::class, 'active_pr
 
 Route::post('/save-product', [ProductController::class, 'save_product']);
 Route::post('/update-product/{product_id}', [ProductController::class, 'update_product']);
+
+Route::post('/filter-admin-product', [ProductController::class, 'filter_admin_product']);
+Route::post('/search-admin-product', [ProductController::class, 'search_admin_product']);
+
 
 //CART -- GIO HANG
 Route::post('/save-cart', [CartController::class, 'save_cart']);

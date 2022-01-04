@@ -44,7 +44,67 @@ class ProductController extends Controller
 		$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
 		return view('admin_layout')->with('admin.product.all_product', $manager_product);
 	}
-
+	public function filter_admin_product(Request $request)
+	{
+		$this->Auth_Login();
+		$keywords = $request->keywords_filter;
+		if ($keywords == '0') {
+			$all_product = DB::table('tbl_product')->where('product_name', 'like', '%' . 'quan' . '%')
+				->join('tbl_category_product', 'tbl_category_product.category_id', '=', 'tbl_product.category_id')
+				->join('tbl_brand', 'tbl_brand.brand_id', '=', 'tbl_product.brand_id')
+				->orderby('product_id', 'desc')->paginate(20);
+			$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
+			return view('admin_layout')->with('admin.product.all_product', $manager_product);
+		}
+		else if ($keywords == '1') {
+			$all_product = DB::table('tbl_product')->where('product_name', 'like', '%' . 'ao' . '%')
+				->join('tbl_category_product', 'tbl_category_product.category_id', '=', 'tbl_product.category_id')
+				->join('tbl_brand', 'tbl_brand.brand_id', '=', 'tbl_product.brand_id')
+				->orderby('product_id', 'desc')->paginate(20);
+			$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
+			return view('admin_layout')->with('admin.product.all_product', $manager_product);
+		}
+		else if ($keywords == '2') {
+			$all_product = DB::table('tbl_product')->where('product_name', 'like', '%' . 'giay' . '%')
+				->join('tbl_category_product', 'tbl_category_product.category_id', '=', 'tbl_product.category_id')
+				->join('tbl_brand', 'tbl_brand.brand_id', '=', 'tbl_product.brand_id')
+				->orderby('product_id', 'desc')->paginate(20);
+			$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
+			return view('admin_layout')->with('admin.product.all_product', $manager_product);
+		}
+		else if ($keywords == '3') {
+			$all_product = DB::table('tbl_product')->where('product_status',0)
+				->join('tbl_category_product', 'tbl_category_product.category_id', '=', 'tbl_product.category_id')
+				->join('tbl_brand', 'tbl_brand.brand_id', '=', 'tbl_product.brand_id')
+				->orderby('product_id', 'desc')->paginate(20);
+			$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
+			return view('admin_layout')->with('admin.product.all_product', $manager_product);
+		}
+		else if ($keywords == '4') {
+			$all_product = DB::table('tbl_product')->where('product_status',1)
+				->join('tbl_category_product', 'tbl_category_product.category_id', '=', 'tbl_product.category_id')
+				->join('tbl_brand', 'tbl_brand.brand_id', '=', 'tbl_product.brand_id')
+				->orderby('product_id', 'desc')->paginate(20);
+			$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
+			return view('admin_layout')->with('admin.product.all_product', $manager_product);
+		}
+	}
+	public function search_admin_product(Request $request)
+	{
+		$this->Auth_Login();
+		$keywords = $request->keywords_search;
+		if ($keywords != '') {
+			$all_product = DB::table('tbl_product')->where('product_name', 'like', '%' . $keywords . '%')
+				->join('tbl_category_product', 'tbl_category_product.category_id', '=', 'tbl_product.category_id')
+				->join('tbl_brand', 'tbl_brand.brand_id', '=', 'tbl_product.brand_id')
+				->orderby('product_id', 'desc')->paginate(5);
+			$manager_product = view('admin.product.all_product')->with('all_product', $all_product);
+			return view('admin_layout')->with('admin.product.all_product', $manager_product);
+		} else {
+			Toastr::info('Hãy nhập từ khóa tìm kiếm!!');
+			return redirect()->back();
+		}
+	}
 	public function save_product(Request $request)
 	{
 		$this->Auth_Login();
@@ -89,8 +149,7 @@ class ProductController extends Controller
 			// Session::put('message', 'Thêm sản phẩm thành công');
 			Toastr::success('Thêm sản phẩm thành công', 'Successful!!');
 			return Redirect::to('add-product'); //Trở về trang all-product
-		}
-		else{
+		} else {
 			Toastr::warning('Vui lòng thêm ảnh', 'Cảnh báo!!');
 			return Redirect::to('add-product'); //Trở về trang all-product
 		}
@@ -102,7 +161,7 @@ class ProductController extends Controller
 		DB::table('tbl_product')->where('product_id', $product_id)->update(['product_status' => 0]);
 		// Session::put('message', 'Kích hoạt hiển thị sản phẩm thành công');
 		Toastr::success('Hiển thị sản phẩm thành công', 'Successful!!');
-		return redirect()->back();
+		return Redirect::to('all-product');
 	}
 
 	public function unactive_product($product_id)
@@ -111,7 +170,7 @@ class ProductController extends Controller
 		DB::table('tbl_product')->where('product_id', $product_id)->update(['product_status' => 1]);
 		// Session::put('message', 'Kích hoạt ẩn sản phẩm thành công');
 		Toastr::success('Ẩn sản phẩm thành công', 'Successful!!');
-		return redirect()->back();
+		return Redirect::to('all-product');
 	}
 
 	public function delete_product($product_id)
@@ -154,7 +213,7 @@ class ProductController extends Controller
 			'product_desc.required' => ' Thêm mô tả sản phẩm.',
 			'product_image.required' => ' Thêm hình ảnh sản phẩm.',
 		]);
-        $product = ProductModels::find($product_id);
+		$product = ProductModels::find($product_id);
 
 		$product->product_name = $data['product_name'];
 		$product->product_price = $data['product_price'];
@@ -177,8 +236,7 @@ class ProductController extends Controller
 			// Session::put('message', 'Thêm sản phẩm thành công');
 			Toastr::success('Cập nhật sản phẩm thành công', 'Successful!!');
 			return Redirect::to('add-product'); //Trở về trang all-product
-		}
-		else{
+		} else {
 			Toastr::warning('Vui lòng thêm ảnh', 'Cảnh báo!!');
 			return Redirect::to('add-product'); //Trở về trang add-product
 		}
@@ -194,7 +252,7 @@ class ProductController extends Controller
 
 		$brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
 
-        $pro = ProductModels::where('meta_keywords',$meta_keywords)->take(1)->get();
+		$pro = ProductModels::where('meta_keywords', $meta_keywords)->take(1)->get();
 
 		foreach ($pro as $key => $val) {
 			$id = $val->product_id;
@@ -204,7 +262,6 @@ class ProductController extends Controller
 			$meta_keywords = $val->meta_keywords;
 			$meta_title = $val->product_name;
 			$url_canonical = $request->url();
-
 		}
 		$details_product = ProductModels::with('category_product')->with('brand_product')->where('product_status', 0)->where('product_id', $id)->where('brand_id', $brand_id)->where('category_id', $category_id)->get();
 

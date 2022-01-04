@@ -4,7 +4,7 @@
         <div class="col-lg-12">
             <section class="panel">
                 <header class="panel-heading">
-                    Thêm sản phẩm
+                    Chỉnh sửa sản phẩm
                 </header>
                 <div class="panel-body">
                     <div class="position-center">
