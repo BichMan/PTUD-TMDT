@@ -62,12 +62,12 @@
 								if($slider->slider_status ==0){
 							?>
                                         <a href="{{ URL::to('/unactive-slider/' . $slider->slider_id) }}"><span
-                                                class=" fa-thumbs-styling fa fa-thumbs-up"></span></a>
+                                                class=" fa-thumbs-styling fa fa-eye"></span></a>
                                         <?php
 								}else{
 							?>
                                         <a href="{{ URL::to('/active-slider/' . $slider->slider_id) }}"><span
-                                                class="fa-thumbs-styling fa fa-thumbs-down"></span></a>
+                                                class="fa-thumbs-styling fa fa-eye-slash"></span></a>
                                         <?php
 							}
 							?>
