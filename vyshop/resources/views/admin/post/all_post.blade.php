@@ -5,6 +5,32 @@
             <div class="panel-heading">
                 Liệt kê bài viết
             </div>
+            <div class="row w3-res-tb">
+                <div class="col-sm-5 m-b-xs">
+                    <form role="form" action="{{ URL::to('/filter-admin-post/') }}" method="post">
+                        @csrf
+                        <select name="keywords_filter" class="input-sm form-control w-sm inline v-middle">
+                            <option selected disabled>Lọc bài viết</option>
+                            <option value="0">Hiển thị</option>
+                            <option value="1">Ẩn</option>
+                        </select>
+                        <button class="btn btn-sm btn-default">Lọc</button>
+                    </form>
+                </div>
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-3">
+                    <form role="form" action="{{ URL::to('/search-admin-post/') }}" method="post">
+                        @csrf
+                        <div class="input-group">
+                            <input type="text" class="input-sm form-control" name="keywords_search" placeholder="Search">
+                            <span class="input-group-btn">
+                                <button class="btn btn-sm btn-default">Tìm kiếm</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped b-t b-light">
                     <thead>

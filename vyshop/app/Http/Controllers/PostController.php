@@ -30,6 +30,40 @@ class PostController extends Controller
 		return view('admin.post.add_post')->with(compact('cate_post'));
 	}
 
+	public function filter_admin_post(Request $request)
+	{
+		$this->Auth_Login();
+		$keywords = $request->keywords_filter;
+		if ($keywords == '0') {
+			$all_post = PostModels::with('cate_post')->where('post_status', 0)->orderBy('post_id')->paginate(20);
+			$cate_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->get();
+
+			return view('admin.post.all_post')->with(compact('all_post', 'cate_post'));
+		}
+		if ($keywords == '1') {
+			$all_post = PostModels::with('cate_post')->where('post_status', 1)->orderBy('post_id')->paginate(20);
+			$cate_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->get();
+
+			return view('admin.post.all_post')->with(compact('all_post', 'cate_post'));
+		} else {
+			Toastr::warning('Hãy chọn thông tin cần lọc!!');
+			return redirect()->back();
+		}
+	}
+	public function search_admin_post(Request $request)
+	{
+		$this->Auth_Login();
+		$keywords = $request->keywords_search;
+		if ($keywords != '') {
+			$all_post = PostModels::with('cate_post')->where('post_title', 'like', '%' . $keywords . '%')->orderBy('post_id')->paginate(20);
+			$cate_post = PostCategoryModels::orderBy('cate_post_id', 'DESC')->get();
+
+			return view('admin.post.all_post')->with(compact('all_post', 'cate_post'));
+		} else {
+			Toastr::warning('Hãy nhập từ khóa tìm kiếm!!');
+			return redirect()->back();
+		}
+	}
 	public function all_post()
 	{
 		$this->Auth_Login();
@@ -38,7 +72,6 @@ class PostController extends Controller
 
 		return view('admin.post.all_post')->with(compact('all_post', 'cate_post'));
 	}
-
 	public function save_post(Request $request)
 	{
 		$this->Auth_Login();
@@ -89,7 +122,7 @@ class PostController extends Controller
 			return redirect()->back(); //Trở về trang all-product
 		} else {
 			Toastr::warning('Vui lòng thêm ảnh', 'Cảnh báo!!');
-			return redirect()->back(); //Trở về trang all-product
+			return Redirect::to('all-post'); //Trở về trang all-product
 		}
 	}
 
@@ -98,7 +131,7 @@ class PostController extends Controller
 		$this->Auth_Login();
 		DB::table('tbl_posts')->where('post_id', $post_id)->update(['post_status' => 0]);
 		Toastr::success('Hiển thị bài viết thành công', 'Successful!!');
-		return redirect()->back();
+		return Redirect::to('all-post');
 	}
 
 	public function unactive_post($post_id)
@@ -107,7 +140,7 @@ class PostController extends Controller
 		DB::table('tbl_posts')->where('post_id', $post_id)->update(['post_status' => 1]);
 		// Session::put('message', 'Kích hoạt ẩn sản phẩm thành công');
 		Toastr::success('Ẩn bài viết thành công', 'Successful!!');
-		return redirect()->back();
+		return Redirect::to('all-post');
 	}
 
 	public function delete_post($post_id)
@@ -122,7 +155,7 @@ class PostController extends Controller
 		// }
 		$post->delete();
 		Toastr::success('Xóa bài viết thành công', 'Successful!!');
-		return redirect()->back();
+		return Redirect::to('all-post');
 	}
 
 	public function edit_post($post_id)
@@ -179,8 +212,7 @@ class PostController extends Controller
 			$post->save();
 			Toastr::success('Cập nhật bài viết thành công', 'Successful!!');
 			return redirect::to('all-post');
-		}
-		else {
+		} else {
 			Toastr::warning('Lỗi khi cập nhật bài viết', 'Cảnh báo!!');
 			return redirect()->back(); //Trở về trang all-product
 		}
@@ -201,7 +233,7 @@ class PostController extends Controller
 		foreach ($post as $key => $po) {
 			$meta_desc = $po->post_meta_desc;
 			$meta_keywords = $po->post_meta_keywords;
-			$meta_title = "Bài viết - ".$po->post_title;
+			$meta_title = "Bài viết - " . $po->post_title;
 			$url_canonical = $request->url();
 		}
 		return View('pages.post.post')->with('category', $cate_product)->with('brand', $brand_product)

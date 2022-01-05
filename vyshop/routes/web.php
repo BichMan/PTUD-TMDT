@@ -83,6 +83,9 @@ Route::get('/edit-post/{post_id}', [PostController::class, 'edit_post']);
 Route::post('/update-post/{post_id}', [PostController::class, 'update_post']);
 Route::post('/save-post', [PostController::class, 'save_post']);
 
+Route::post('/filter-admin-post', [PostController::class, 'filter_admin_post']);
+Route::post('/search-admin-post', [PostController::class, 'search_admin_post']);
+
 //Brand Product
 Route::get('/add-brand-product', [BrandProductController::class, 'add_brand_product']);
 Route::get('/all-brand-product', [BrandProductController::class, 'all_brand_product']);
@@ -161,6 +164,8 @@ Route::post('/insert-slider',[SliderController::class, 'insert_slider']);
 Route::get('/unactive-slider/{slider_id}',[SliderController::class, 'unactive_slider']);
 Route::get('/active-slider/{slider_id}',[SliderController::class, 'active_slider']);
 Route::get('/delete-slider/{slider_id}',[SliderController::class, 'delete_slider']);
+Route::post('/filter-admin-banner', [SliderController::class, 'filter_admin_banner']);
+Route::post('/search-admin-banner', [SliderController::class, 'search_admin_banner']);
 
 
 

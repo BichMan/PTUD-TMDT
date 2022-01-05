@@ -7,7 +7,7 @@ use App\Models\SliderModels;
 use Illuminate\Support\Facades\Redirect;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Session;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class SliderController extends Controller
 {
@@ -24,6 +24,34 @@ class SliderController extends Controller
     {
         $all_slider = SliderModels::orderBy('slider_id', 'DESC')->paginate(4);
         return view('admin.slider.list_slider')->with(compact('all_slider'));
+    }
+    public function filter_admin_banner(Request $request)
+    {
+        $this->Auth_Login();
+        $keywords = $request->keywords_filter;
+        if ($keywords == '0') {
+            $all_slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status',0)->paginate(20);
+            return view('admin.slider.list_slider')->with(compact('all_slider'));
+        }
+        if ($keywords == '1') {
+            $all_slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_status',1)->paginate(20);
+            return view('admin.slider.list_slider')->with(compact('all_slider'));
+        } else {
+            Toastr::warning('Hãy chọn thông tin cần lọc!!');
+            return redirect()->back();
+        }
+    }
+    public function search_admin_banner(Request $request)
+    {
+        $this->Auth_Login();
+        $keywords = $request->keywords_search;
+        if ($keywords != '') {
+            $all_slider = SliderModels::orderBy('slider_id', 'DESC')->where('slider_name', 'like', '%' . $keywords . '%')->paginate(20);
+            return view('admin.slider.list_slider')->with(compact('all_slider'));
+        } else {
+            Toastr::warning('Hãy nhập từ khóa tìm kiếm!!');
+            return redirect()->back();
+        }
     }
 
     public function add_slider()
